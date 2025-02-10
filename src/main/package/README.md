@@ -68,7 +68,7 @@ https://repo.maven.apache.org/maven2/org/glassfish/jersey/core/jersey-common/2.3
 
 ## doris
 ```bash
-https://archive.apache.org/dist/doris/2.1/2.1.7/apache-doris-2.1.7-rc03-src.tar.gz
+https://apache-doris-releases.oss-accelerate.aliyuncs.com/apache-doris-2.1.7-bin-x64-noavx2.tar.gz
 ```
 
 ## seatunnel
