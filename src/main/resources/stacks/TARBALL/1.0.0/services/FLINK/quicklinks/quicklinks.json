@@ -1,0 +1,26 @@
+{ 
+ "name": "default",
+  "description": "default quick links configuration",
+  "configuration": {
+    "protocol":
+    {
+      "type":"http"
+    },
+
+    "links": [
+      {
+        "name": "Flink History UI",
+        "label": "Flink History UI",
+        "requires_user_name": "false",
+        "component_name": "FLINK_HISTORYSERVER",
+        "url": "%@://%@:%@",
+        "port":{
+          "http_property": "historyserver.web.port",
+          "http_default_port": "8082",
+          "regex": "^(\\d+)$",
+          "site": "flink-env"
+        }
+      }
+    ]
+  }
+}

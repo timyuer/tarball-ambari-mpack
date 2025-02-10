@@ -1,0 +1,8 @@
+{
+  "general_deps" : {
+    "_comment" : "dependencies for SEATUNNEL",
+    "SEATUNNEL_SERVER-START" : ["ZOOKEEPER_SERVER-START"],
+    "SEATUNNEL_SERVER-STOP" : ["ZOOKEEPER_SERVER-STOP"],
+    "SEATUNNEL_SERVICE_CHECK-SERVICE_CHECK" : ["SEATUNNEL_SERVER-START"]
+  }
+}

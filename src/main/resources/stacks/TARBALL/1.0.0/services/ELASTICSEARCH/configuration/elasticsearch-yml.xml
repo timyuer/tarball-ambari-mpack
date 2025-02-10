@@ -1,0 +1,540 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+       http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<configuration supports_adding_forbidden="true">
+
+  <!-- Cluster -->
+  <property>
+    <name>cluster_name</name>
+    <display-name>cluster_name</display-name>
+    <value>elasticsearch</value>
+    <description>Elasticsearch cluster name</description>
+  </property>
+
+  <!-- Node -->
+  <property>
+    <name>node_attr_rack</name>
+    <display-name>Node attr rack</display-name>
+    <value>/default-rack</value>
+    <description>Add custom attributes to the node</description>
+  </property>
+
+  <!-- Paths -->
+  <property>
+    <name>path_data</name>
+    <display-name>Path data</display-name>
+    <value>/opt/bdp/data01/elasticsearch/data</value>
+    <description>Path to directory where to store the data (separate multiple directory by comma)</description>
+    <final>true</final>
+    <value-attributes>
+      <type>directories</type>
+      <!--<overridable>false</overridable>-->
+    </value-attributes>
+    <on-ambari-upgrade add="true" />
+  </property>
+
+  <!-- Memory -->
+  <property>
+    <name>bootstrap_memory_lock</name>
+    <display-name>Bootstrap memory lock</display-name>
+    <value>false</value>
+    <description>Whether memory is locked on elasticsearch startup</description>
+    <value-attributes>
+      <overridable>false</overridable>
+      <type>value-list</type>
+      <entries>
+        <entry>
+          <value>true</value>
+          <label>ON</label>
+        </entry>
+        <entry>
+          <value>false</value>
+          <label>OFF</label>
+        </entry>
+      </entries>
+      <selection-cardinality>1</selection-cardinality>
+    </value-attributes>
+  </property>
+  <property>
+    <name>bootstrap_system_call_filter</name>
+    <display-name>Bootstrap system call filter</display-name>
+    <value>false</value>
+    <description>Whether check SecComp on elasticsearch startup</description>
+    <value-attributes>
+      <overridable>false</overridable>
+      <type>value-list</type>
+      <entries>
+        <entry>
+          <value>true</value>
+          <label>ON</label>
+        </entry>
+        <entry>
+          <value>false</value>
+          <label>OFF</label>
+        </entry>
+      </entries>
+      <selection-cardinality>1</selection-cardinality>
+    </value-attributes>
+  </property>
+
+  <!-- Network -->
+  <!--<property>-->
+  <!--<name>network_host</name>-->
+  <!--<value>{{hostname}}</value>-->
+  <!--<description>Set the bind address to a specific IP (IPv4 or IPv6)</description>-->
+  <!--</property>-->
+
+  <property>
+    <name>elasticsearch_port</name>
+    <display-name>Elasticsearch port</display-name>
+    <value>9200</value>
+    <description>Elasticsearch port</description>
+  </property>
+
+  <property>
+    <name>elasticsearch_head_port</name>
+    <display-name>Elasticsearch head port</display-name>
+    <value>9100</value>
+    <description>Elasticsearch head port</description>
+  </property>
+
+  <property>
+    <name>content</name>
+    <display-name>Elasticsearch config file template</display-name>
+    <description>This is the template for elasticsearch.yml file</description>
+    <value>
+            <![CDATA[
+# ======================== Elasticsearch Configuration =========================
+#
+# NOTE: Elasticsearch comes with reasonable defaults for most settings.
+# Before you set out to tweak and tune the configuration, make sure you
+# understand what are you trying to accomplish and the consequences.
+#
+# The primary way of configuring a node is via this file. This template lists
+# the most important settings you may want to configure for a production cluster.
+#
+# Please see the documentation for further information on configuration options:
+
+# ---------------------------------- Cluster -----------------------------------
+# Use a descriptive name for your cluster:
+cluster.name: {{cluster_name}}
+
+# ------------------------------------ Node ------------------------------------
+# Use a descriptive name for the node:
+node.name: {{hostname}}
+
+# Add custom attributes to the node:
+node.attr.rack: {{node_attr_rack}}
+
+# ----------------------------------- Paths ------------------------------------
+# Path to directory where to store the data (separate multiple locations by comma):
+path.data: {{path_data}}
+
+# Path to log files:
+path.logs: {{elastic_log_dir}}
+
+# ----------------------------------- Memory -----------------------------------
+#
+# Lock the memory on startup:
+#
+bootstrap.memory_lock: {{bootstrap_memory_lock}}
+
+# ---------------------------------- Network -----------------------------------
+# Set the bind address to a specific IP (IPv4 or IPv6):
+network.host: {{hostname}}
+
+# Set a custom port for HTTP:
+http.port: {{elasticsearch_port}}
+transport.tcp.port: 9300
+
+# ----------------------------------- Head Requires -----------------------------------
+http.cors.enabled: {{http_cors_enabled}}
+http.cors.allow-origin: "{{http_cors_allow_origin}}"
+http.cors.allow-headers: {{http_cors_allow_headers}}
+# --------------------------------- Discovery ----------------------------------
+# Pass an initial list of hosts to perform discovery when new node is started:
+# The default list of hosts is ["127.0.0.1", "[::1]"]
+discovery.seed_hosts: {{discovery_zen_ping_unicast_hosts}}
+# init master from node list
+cluster.initial_master_nodes: {{cluster_initial_master_nodes}}
+
+# Prevent the "split brain" by configuring the majority of nodes (total number of nodes / 2 + 1):
+discovery.zen.minimum_master_nodes: {{discovery_zen_minimum_master_nodes}}
+
+# ---------------------------------- Gateway -----------------------------------
+#
+# Block initial recovery after a full cluster restart until N nodes are started:
+#
+gateway.recover_after_nodes: {{gateway_recover_after_nodes}}
+#
+# For more information, consult the gateway module documentation.
+#
+# ---------------------------------- Various 123-----------------------------------
+#
+# Require explicit names when deleting indices:
+#
+action.destructive_requires_name: {{action_destructive_requires_name}}
+{% if ping_timeout_default %}
+
+{% else %}
+discovery.zen.ping_timeout: {{discovery_zen_ping_timeout}}s
+{% endif %}
+# security
+{% if xpack_security_enabled %}
+xpack.security.enabled: true
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.verification_mode: certificate
+xpack.security.transport.ssl.client_authentication: required
+xpack.security.transport.ssl.keystore.path: {{elastic_conf_dir}}/elastic-certificates.p12
+xpack.security.transport.ssl.truststore.path: {{elastic_conf_dir}}/elastic-certificates.p12
+{% else %}
+
+{% endif %}
+]]>
+        </value>
+    <value-attributes>
+      <type>content</type>
+      <show-property-name>true</show-property-name>
+    </value-attributes>
+    <on-ambari-upgrade add="true" />
+  </property>
+  <property>
+    <name>jvm_options</name>
+    <display-name>Elasticsearch jvm options file template</display-name>
+    <description>This is the template for jvm.options file</description>
+    <value>
+            <![CDATA[
+################################################################
+##
+## JVM configuration
+##
+################################################################
+##
+## WARNING: DO NOT EDIT THIS FILE. If you want to override the
+## JVM options in this file, or set any additional options, you
+## should create one or more files in the jvm.options.d
+## directory containing your adjustments.
+##
+## See https://www.elastic.co/guide/en/elasticsearch/reference/7.17/jvm-options.html
+## for more information.
+##
+################################################################
+
+
+
+################################################################
+## IMPORTANT: JVM heap size
+################################################################
+##
+## The heap size is automatically configured by Elasticsearch
+## based on the available memory in your system and the roles
+## each node is configured to fulfill. If specifying heap is
+## required, it should be done through a file in jvm.options.d,
+## and the min and max should be set to the same value. For
+## example, to set the heap to 4 GB, create a new file in the
+## jvm.options.d directory containing these lines:
+##
+## -Xms4g
+## -Xmx4g
+##
+## See https://www.elastic.co/guide/en/elasticsearch/reference/7.17/heap-size.html
+## for more information
+##
+################################################################
+-Xms{{jvm_heap_size}}
+-Xmx{{jvm_heap_size}}
+
+################################################################
+## Expert settings
+################################################################
+##
+## All settings below here are considered expert settings. Do
+## not adjust them unless you understand what you are doing. Do
+## not edit them in this file; instead, create a new file in the
+## jvm.options.d directory containing your adjustments.
+##
+################################################################
+
+## GC configuration
+8-13:-XX:+UseConcMarkSweepGC
+8-13:-XX:CMSInitiatingOccupancyFraction=75
+8-13:-XX:+UseCMSInitiatingOccupancyOnly
+
+## G1GC Configuration
+# NOTE: G1 GC is only supported on JDK version 10 or later
+# to use G1GC, uncomment the next two lines and update the version on the
+# following three lines to your version of the JDK
+# 10-13:-XX:-UseConcMarkSweepGC
+# 10-13:-XX:-UseCMSInitiatingOccupancyOnly
+14-:-XX:+UseG1GC
+
+## JVM temporary directory
+-Djava.io.tmpdir=${ES_TMPDIR}
+
+## heap dumps
+
+# generate a heap dump when an allocation from the Java heap fails; heap dumps
+# are created in the working directory of the JVM unless an alternative path is
+# specified
+-XX:+HeapDumpOnOutOfMemoryError
+
+# exit right after heap dump on out of memory error. Recommended to also use
+# on java 8 for supported versions (8u92+).
+9-:-XX:+ExitOnOutOfMemoryError
+
+# specify an alternative path for heap dumps; ensure the directory exists and
+# has sufficient space
+-XX:HeapDumpPath=data
+
+# specify an alternative path for JVM fatal error logs
+-XX:ErrorFile=logs/hs_err_pid%p.log
+
+## JDK 8 GC logging
+8:-XX:+PrintGCDetails
+8:-XX:+PrintGCDateStamps
+8:-XX:+PrintTenuringDistribution
+8:-XX:+PrintGCApplicationStoppedTime
+8:-Xloggc:logs/gc.log
+8:-XX:+UseGCLogFileRotation
+8:-XX:NumberOfGCLogFiles=32
+8:-XX:GCLogFileSize=64m
+
+# JDK 9+ GC logging
+9-:-Xlog:gc*,gc+age=trace,safepoint:file=logs/gc.log:utctime,pid,tags:filecount=32,filesize=64m
+            ]]>
+        </value>
+    <value-attributes>
+      <type>content</type>
+      <show-property-name>true</show-property-name>
+    </value-attributes>
+    <on-ambari-upgrade add="true" />
+  </property>
+  <!-- Discovery -->
+  <!--<property>-->
+  <!--<name>discovery_zen_ping_unicast_hosts</name>-->
+  <!--<value></value>-->
+  <!--<description>Pass an initial list of hosts to perform discovery when new node is
+  started</description>-->
+  <!--</property>-->
+
+  <!--<property>-->
+  <!--<name>discovery_zen_minimum_master_nodes</name>-->
+  <!--<value>1</value>-->
+  <!--<description>Prevent the "split brain" by configuring the majority of nodes (total number of
+  nodes / 2 + 1)</description>-->
+  <!--</property>-->
+  <property>
+    <name>xpack_security_enabled</name>
+    <display-name>xpack_security_enabled</display-name>
+    <value>false</value>
+    <description>Allow cross-domain, default is "*", indicating support for all domain names.</description>
+  </property>
+
+
+  <!-- Head Requires -->
+  <property>
+    <name>http_cors_enabled</name>
+    <display-name>Http cors enabled</display-name>
+    <value>true</value>
+    <description>Whether to support cross-domain</description>
+    <value-attributes>
+      <overridable>false</overridable>
+      <type>value-list</type>
+      <entries>
+        <entry>
+          <value>true</value>
+          <label>ON</label>
+        </entry>
+        <entry>
+          <value>false</value>
+          <label>OFF</label>
+        </entry>
+      </entries>
+      <selection-cardinality>1</selection-cardinality>
+    </value-attributes>
+  </property>
+
+  <property>
+    <name>http_cors_allow_origin</name>
+    <display-name>Http cors allow origin</display-name>
+    <value>*</value>
+    <description>Allow cross-domain, default is "*", indicating support for all domain names.</description>
+  </property>
+
+  <property>
+    <name>http_cors_allow_headers</name>
+    <display-name>http.cors.allow-headers</display-name>
+    <value>Authorization,X-Requested-With,Content-Type,Content-Length</value>
+    <description>X-pack authorization</description>
+  </property>
+
+  <!-- Gateway -->
+  <property>
+    <name>gateway_recover_after_nodes</name>
+    <display-name>Gateway recover after nodes</display-name>
+    <value>1</value>
+    <description>Allow Initialization Recovery after N Nodes Start</description>
+    <final>true</final>
+    <value-attributes>
+      <type>int</type>
+      <minimum>0</minimum>
+      <maximum>6</maximum>
+      <increment-step>1</increment-step>
+    </value-attributes>
+  </property>
+
+  <!-- Various -->
+  <property>
+    <name>node_max_local_storage_nodes</name>
+    <display-name>Node max local storage nodes</display-name>
+    <value>1</value>
+    <description>Set the number of elasticsearch nodes that a machine can run, usually using the
+      default of 1.
+    </description>
+    <final>true</final>
+    <value-attributes>
+      <type>int</type>
+      <minimum>0</minimum>
+      <maximum>6</maximum>
+      <increment-step>1</increment-step>
+    </value-attributes>
+    <on-ambari-upgrade add="true" />
+  </property>
+
+  <!--index.number_of_replicas-->
+  <property>
+    <name>discovery_zen_ping_timeout</name>
+    <display-name>discovery.zen.ping.timeout</display-name>
+    <value>10</value>
+    <description>discovery zen ping timeout</description>
+    <value-attributes>
+      <type>int</type>
+      <minimum>1</minimum>
+      <maximum>30</maximum>
+      <increment-step>1</increment-step>
+    </value-attributes>
+    <on-ambari-upgrade add="true" />
+  </property>
+
+  <property>
+    <name>ping_timeout_default</name>
+    <display-name>ping timeout default</display-name>
+    <value>true</value>
+    <description>...</description>
+    <value-attributes>
+      <overridable>false</overridable>
+      <type>value-list</type>
+      <entries>
+        <entry>
+          <value>true</value>
+          <label>ON</label>
+        </entry>
+        <entry>
+          <value>false</value>
+          <label>OFF</label>
+        </entry>
+      </entries>
+      <selection-cardinality>1</selection-cardinality>
+    </value-attributes>
+  </property>
+
+  <property>
+    <name>action_destructive_requires_name</name>
+    <display-name>Action destructive requires name</display-name>
+    <value>false</value>
+    <description>When deleting an index, do you need to specify a name explicitly? When the value is
+      false, it can
+      be deleted by regular or _all.
+    </description>
+    <value-attributes>
+      <overridable>false</overridable>
+      <type>value-list</type>
+      <entries>
+        <entry>
+          <value>true</value>
+          <label>ON</label>
+        </entry>
+        <entry>
+          <value>false</value>
+          <label>OFF</label>
+        </entry>
+      </entries>
+      <selection-cardinality>1</selection-cardinality>
+    </value-attributes>
+    <on-ambari-upgrade add="true" />
+  </property>
+
+  <property>
+    <name>es.head.http.policy</name>
+    <value>HTTP_ONLY</value>
+    <description>
+      This configures the HTTP endpoint for Elasticsearch Head Daemons.The following values are
+      supported: -
+      HTTP_ONLY : Service is provided only on http - HTTPS_ONLY : Service is provided only on https
+    </description>
+  </property>
+  <property>
+    <name>zookeeper.session.timeout</name>
+    <value>90000</value>
+    <description>ZooKeeper session timeout.
+      ZooKeeper session timeout in milliseconds. It is used in two different ways.
+      First, this value is used in the ZK client that HBase uses to connect to the ensemble.
+      It is also used by HBase when it starts a ZK server and it is passed as the
+      'maxSessionTimeout'. See
+      http://hadoop.apache.org/zookeeper/docs/current/zookeeperProgrammers.html#ch_zkSessions.
+      For example, if a HBase region server connects to a ZK ensemble that's also managed by HBase,
+      then the
+      session timeout will be the one specified by this configuration. But, a region server that
+      connects
+      to an ensemble managed with a different configuration will be subjected that ensemble's
+      maxSessionTimeout.
+      So,
+      even though HBase might propose using 90 seconds, the ensemble can have a max timeout lower
+      than this and
+      it will take precedence.
+    </description>
+    <display-name>Zookeeper Session Timeout</display-name>
+    <value-attributes>
+      <type>int</type>
+      <minimum>10000</minimum>
+      <maximum>180000</maximum>
+      <unit>milliseconds</unit>
+      <increment-step>10000</increment-step>
+    </value-attributes>
+    <on-ambari-upgrade add="false" />
+  </property>
+  <property>
+    <name>hbase.hregion.majorcompaction</name>
+    <value>604800000</value>
+    <description>Time between major compactions, expressed in milliseconds. Set to 0 to disable
+      time-based automatic major compactions. User-requested and size-based major compactions will
+      still run. This value is multiplied by hbase.hregion.majorcompaction.jitter to cause
+      compaction to start at a somewhat-random time during a given window of time. The default value
+      is 7 days, expressed in milliseconds. If major compactions are causing disruption in your
+      environment, you can configure them to run at off-peak times for your deployment, or disable
+      time-based major compactions by setting this parameter to 0, and run major compactions in a
+      cron job or by another external mechanism.
+    </description>
+    <display-name>Major Compaction Interval</display-name>
+    <value-attributes>
+      <type>int</type>
+      <minimum>0</minimum>
+      <maximum>2592000000</maximum>
+      <unit>milliseconds</unit>
+    </value-attributes>
+    <on-ambari-upgrade add="false" />
+  </property>
+</configuration>

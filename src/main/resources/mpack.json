@@ -1,0 +1,18 @@
+{
+  "type" : "full-release",
+  "name" : "tarball-ambari-mpack",
+  "version": "${project.version}",
+  "hash": "${buildNumber}",
+  "branch": "${scmBranch}",
+  "description" : "Tarball Ambari Management Pack",
+  "prerequisites": {
+    "min-ambari-version" : "${minAmbariVersion}"
+  },
+  "artifacts": [
+    {
+      "name" : "tarball-stack-definitions",
+      "type" : "stack-definitions",
+      "source_dir": "stacks"
+    }
+  ]
+}

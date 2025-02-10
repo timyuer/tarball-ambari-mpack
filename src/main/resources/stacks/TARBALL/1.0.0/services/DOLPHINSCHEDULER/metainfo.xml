@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<metainfo>
+  <schemaVersion>2.0</schemaVersion>
+  <services>
+    <service>
+      <name>DOLPHINSCHEDULER</name>
+      <displayName>DolphinScheduler</displayName>
+      <comment>Agile to Create High-Performance Workflow With Low-Code</comment>
+      <version>3.2.2</version>
+      <components>
+        <component>
+          <name>MASTER_SERVER</name>
+          <displayName>Master Server</displayName>
+          <category>MASTER</category>
+          <cardinality>1+</cardinality>
+          <commandScript>
+            <script>scripts/master_server.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>600</timeout>
+          </commandScript>
+        </component>
+        <component>
+          <name>WORKER_SERVER</name>
+          <displayName>Worker Server</displayName>
+          <category>SLAVE</category>
+          <cardinality>1+</cardinality>
+          <commandScript>
+            <script>scripts/worker_server.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>600</timeout>
+          </commandScript>
+        </component>
+        <component>
+          <name>API_SERVER</name>
+          <displayName>Api Server</displayName>
+          <category>SLAVE</category>
+          <cardinality>0+</cardinality>
+          <commandScript>
+            <script>scripts/api_server.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>600</timeout>
+          </commandScript>
+        </component>
+        <component>
+          <name>ALERT_SERVER</name>
+          <displayName>Alert Server</displayName>
+          <category>SLAVE</category>
+          <cardinality>0+</cardinality>
+          <commandScript>
+            <script>scripts/alert_server.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>600</timeout>
+          </commandScript>
+        </component>
+      </components>
+
+      <requiredServices>
+        <service>ZOOKEEPER</service>
+      </requiredServices>
+
+      <osSpecifics>
+        <osSpecific>
+          <osFamily>any</osFamily>
+        </osSpecific>
+      </osSpecifics>
+      <quickLinksConfigurations>
+        <quickLinksConfiguration>
+          <fileName>quicklinks.json</fileName>
+          <default>true</default>
+        </quickLinksConfiguration>
+      </quickLinksConfigurations>
+
+      <configuration-dependencies>
+        <config-type>dolphinscheduler-env</config-type>
+      </configuration-dependencies>
+      <restartRequiredAfterChange>true</restartRequiredAfterChange>
+
+      <commandScript>
+        <script>scripts/service_check.py</script>
+        <scriptType>PYTHON</scriptType>
+        <timeout>300</timeout>
+      </commandScript>
+    </service>
+  </services>
+</metainfo>

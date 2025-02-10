@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<configuration supports_adding_forbidden="true">
+
+  <property>
+    <name>seatunnel_user</name>
+    <display-name>SeaTunnel User</display-name>
+    <value>seatunnel</value>
+    <property-type>USER</property-type>
+    <description>SeaTunnel user</description>
+    <value-attributes>
+      <type>user</type>
+      <overridable>false</overridable>
+      <user-groups>
+        <property>
+          <type>seatunnel-env</type>
+          <name>seatunnel_group</name>
+        </property>
+      </user-groups>
+    </value-attributes>
+    <on-ambari-upgrade add="true" />
+  </property>
+
+  <property>
+    <name>seatunnel_group</name>
+    <display-name>SeaTunnel Group</display-name>
+    <value>seatunnel</value>
+    <property-type>GROUP</property-type>
+    <description>SeaTunnel group</description>
+    <on-ambari-upgrade add="true" />
+  </property>
+
+  <property>
+    <name>seatunnel_log_dir</name>
+    <value>/var/log/seatunnel</value>
+    <description />
+    <value-attributes>
+      <type>directory</type>
+      <editable-only-at-install>true</editable-only-at-install>
+      <overridable>false</overridable>
+    </value-attributes>
+    <on-ambari-upgrade add="true" />
+  </property>
+  <property>
+    <name>seatunnel_pid_dir</name>
+    <value>/var/run/seatunnel</value>
+    <description />
+    <value-attributes>
+      <type>directory</type>
+      <editable-only-at-install>true</editable-only-at-install>
+      <overridable>false</overridable>
+    </value-attributes>
+    <on-ambari-upgrade add="true" />
+  </property>
+  <property>
+    <name>seatunnel_connectors_name</name>
+    <value>seatunnel</value>
+    <description />
+    <on-ambari-upgrade add="true" />
+  </property>
+
+  <property>
+    <name>seatunnel_user_nofile_soft</name>
+    <value>262144</value>
+    <description>Max open files limit setting for SeaTunnel user.</description>
+    <on-ambari-upgrade add="true" />
+  </property>
+  <property>
+    <name>seatunnel_user_nofile_hard</name>
+    <value>262144</value>
+    <description>Max number of processes limit setting for SeaTunnel user.</description>
+    <on-ambari-upgrade add="true" />
+  </property>
+
+  <property>
+    <name>seatunnel_env_content</name>
+    <value>
+#!/usr/bin/env bash
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# Home directory of spark distribution.
+SPARK_HOME={{spark_home}}
+# Home directory of flink distribution.
+FLINK_HOME={{flink_home}}
+
+# export SEATUNNEL_HOME
+SEATUNNEL_HOME={{seatunnel_home}}
+
+JAVA_HOME={{java_home}}
+
+    </value>
+    <description>Template for seatunnel</description>
+    <value-attributes>
+      <type>content</type>
+      <show-property-name>true</show-property-name>
+    </value-attributes>
+    <on-ambari-upgrade add="true" />
+  </property>
+</configuration>

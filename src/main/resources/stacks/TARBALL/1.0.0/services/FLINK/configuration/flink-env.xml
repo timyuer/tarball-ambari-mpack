@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+       http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<configuration supports_adding_forbidden="true">
+  <property>
+    <name>flink_user</name>
+    <display-name>Flink user</display-name>
+    <value>flink</value>
+    <description>Flink user</description>
+    <property-type>USER</property-type>
+    <value-attributes>
+      <type>user</type>
+      <overridable>false</overridable>
+      <user-groups>
+        <property>
+          <type>cluster-env</type>
+          <name>user_group</name>
+        </property>
+        <property>
+          <type>flink-env</type>
+          <name>flink_group</name>
+        </property>
+      </user-groups>
+    </value-attributes>
+  </property>
+
+  <property>
+    <name>flink_group</name>
+    <display-name>Flink User Group</display-name>
+    <value>flink</value>
+    <property-type>GROUP</property-type>
+    <description>Flink user group.</description>
+  </property>
+
+  <property>
+    <name>flink_log_dir</name>
+    <display-name>flink log directory</display-name>
+    <value>/var/log/flink</value>
+    <description>flink log directory</description>
+  </property>
+  <property>
+    <name>env_log_max</name>
+    <display-name>flink log max</display-name>
+    <value>10</value>
+    <description>flink log max</description>
+  </property>
+  <property>
+    <name>flink_pid_dir</name>
+    <display-name>flink pid directory</display-name>
+    <value>/var/run/flink</value>
+    <description>flink pid directory</description>
+  </property>
+  <property>
+    <name>flink_dependency_jar</name>
+    <value>/hdp/apps/3.1.4.0-315/flink</value>
+    <description>hdfs path to flink dependency jar</description>
+  </property>
+</configuration>

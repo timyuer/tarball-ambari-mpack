@@ -1,0 +1,321 @@
+{
+  "name": "default",
+  "description": "Default theme for ELASTICSEARCH server",
+  "configuration": {
+    "placement": {
+      "configuration-layout": "default",
+      "configs": [
+        {
+          "config": "elasticsearch-yml/path_data",
+          "subsection-name": "subsection-es-dir-col1"
+        },
+        {
+          "config": "elasticsearch-yml/gateway_recover_after_nodes",
+          "subsection-name": "subsection-es-num-col1"
+        },
+        {
+          "config": "elasticsearch-yml/node_max_local_storage_nodes",
+          "subsection-name": "subsection-es-num-col2"
+        },
+        {
+          "config": "elasticsearch-yml/bootstrap_memory_lock",
+          "subsection-name": "subsection-es-memory-col1"
+        },
+        {
+          "config": "elasticsearch-yml/bootstrap_system_call_filter",
+          "subsection-name": "subsection-es-memory-col1"
+        },
+        {
+          "config": "elasticsearch-yml/http_cors_enabled",
+          "subsection-name": "subsection-es-requires-col1"
+        },
+        {
+          "config": "elasticsearch-yml/zookeeper.session.timeout",
+          "subsection-name": "subsection-es-requires-col1"
+        },
+        {
+          "config": "elasticsearch-yml/action_destructive_requires_name",
+          "subsection-name": "subsection-es-various-col1"
+        },
+        {
+          "config": "elasticsearch-yml/hbase.hregion.majorcompaction",
+          "subsection-name": "subsection-es-various-col1"
+        },
+        {
+          "config": "elasticsearch-yml/ping_timeout_default",
+          "subsection-name": "subsection-es-timeout-col1"
+        },
+        {
+          "config": "elasticsearch-yml/discovery_zen_ping_timeout",
+          "subsection-name": "subsection-es-timeout-col2"
+        }
+      ]
+    },
+    "widgets": [
+      {
+        "config": "elasticsearch-yml/path_data",
+        "widget": {
+          "type": "directories"
+        }
+      },
+      {
+        "config": "elasticsearch-yml/gateway_recover_after_nodes",
+        "widget": {
+          "type": "slider",
+          "units": [
+            {
+              "unit-name": "int"
+            }
+          ]
+        }
+      },
+      {
+        "config": "elasticsearch-yml/node_max_local_storage_nodes",
+        "widget": {
+          "type": "slider",
+          "units": [
+            {
+              "unit-name": "int"
+            }
+          ]
+        }
+      },
+      {
+        "config": "elasticsearch-yml/bootstrap_memory_lock",
+        "widget": {
+          "type": "toggle"
+        }
+      },
+      {
+        "config": "elasticsearch-yml/bootstrap_system_call_filter",
+        "widget": {
+          "type": "toggle"
+        }
+      },
+      {
+        "config": "elasticsearch-yml/http_cors_enabled",
+        "widget": {
+          "type": "toggle"
+        }
+      },
+      {
+        "config": "elasticsearch-yml/zookeeper.session.timeout",
+        "widget": {
+          "type": "time-interval-spinner",
+          "units": [
+            {
+              "unit-name": "minutes,seconds"
+            }
+          ]
+        }
+      },
+      {
+        "config": "elasticsearch-yml/action_destructive_requires_name",
+        "widget": {
+          "type": "toggle"
+        }
+      },
+      {
+        "config": "elasticsearch-yml/hbase.hregion.majorcompaction",
+        "widget": {
+          "type": "time-interval-spinner",
+          "units": [
+            {
+              "unit-name": "days,hours"
+            }
+          ]
+        }
+      },
+      {
+        "config": "elasticsearch-yml/ping_timeout_default",
+        "widget": {
+          "type": "toggle"
+        }
+      },
+      {
+        "config": "elasticsearch-yml/discovery_zen_ping_timeout",
+        "widget": {
+          "type": "slider",
+          "units": [
+            {
+              "unit-name": "int"
+            }
+          ]
+        }
+      }
+    ],
+    "layouts": [
+      {
+        "name": "default",
+        "tabs": [
+          {
+            "name": "settings",
+            "display-name": "Settings",
+            "layout": {
+              "tab-columns": "6",
+              "tab-rows": "6",
+              "sections": [
+                {
+                  "name": "section-es-dir",
+                  "display-name": "Directory",
+                  "row-index": "0",
+                  "column-index": "0",
+                  "row-span": "1",
+                  "column-span": "3",
+                  "section-columns": "1",
+                  "section-rows": "1",
+                  "subsections": [
+                    {
+                      "name": "subsection-es-dir-col1",
+                      "row-index": "0",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "1"
+                    }
+                  ]
+                },
+                {
+                  "name": "section-es-num",
+                  "display-name": "Number",
+                  "row-index": "0",
+                  "column-index": "1",
+                  "row-span": "1",
+                  "column-span": "3",
+                  "section-columns": "2",
+                  "section-rows": "1",
+                  "subsections": [
+                    {
+                      "name": "subsection-es-num-col1",
+                      "row-index": "0",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "1"
+                    },
+                    {
+                      "name": "subsection-es-num-col2",
+                      "row-index": "0",
+                      "column-index": "1",
+                      "row-span": "1",
+                      "column-span": "1"
+                    }
+                  ]
+                },
+                {
+                  "name": "section-es-memory",
+                  "display-name": "Memory",
+                  "row-index": "1",
+                  "column-index": "0",
+                  "row-span": "1",
+                  "column-span": "2",
+                  "section-columns": "1",
+                  "section-rows": "2",
+                  "subsections": [
+                    {
+                      "name": "subsection-es-memory-col1",
+                      "row-index": "0",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "1"
+                    }
+                  ]
+                },
+                {
+                  "name": "section-es-requires",
+                  "display-name": "Head Requires",
+                  "row-index": "1",
+                  "column-index": "0",
+                  "row-span": "1",
+                  "column-span": "2",
+                  "section-columns": "1",
+                  "section-rows": "2",
+                  "subsections": [
+                    {
+                      "name": "subsection-es-requires-col1",
+                      "row-index": "0",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "1"
+                    }
+                  ]
+                },
+                {
+                  "name": "section-es-various",
+                  "display-name": "Various",
+                  "row-index": "1",
+                  "column-index": "0",
+                  "row-span": "1",
+                  "column-span": "2",
+                  "section-columns": "1",
+                  "section-rows": "2",
+                  "subsections": [
+                    {
+                      "name": "subsection-es-various-col1",
+                      "row-index": "0",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "1"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "name": "test",
+            "display-name": "Test",
+            "layout": {
+              "tab-columns": "6",
+              "tab-rows": "6",
+              "sections": [
+                {
+                  "name": "section-es-timeout",
+                  "display-name": "Timeout",
+                  "row-index": "0",
+                  "column-index": "0",
+                  "row-span": "6",
+                  "column-span": "6",
+                  "section-columns": "1",
+                  "section-rows": "2",
+                  "subsections": [
+                    {
+                      "name": "subsection-es-timeout-col1",
+                      "row-index": "0",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "1"
+                    },
+                    {
+                      "name": "subsection-es-timeout-col2",
+                      "row-index": "1",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "1",
+                      "depends-on": [
+                        {
+                          "configs": [
+                            "elasticsearch-yml/ping_timeout_default"
+                          ],
+                          "if": "${elasticsearch-yml/ping_timeout_default}",
+                          "then": {
+                            "property_value_attributes": {
+                              "visible": true
+                            }
+                          },
+                          "else": {
+                            "property_value_attributes": {
+                              "visible": false
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

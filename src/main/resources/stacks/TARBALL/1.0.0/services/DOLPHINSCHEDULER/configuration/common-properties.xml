@@ -1,0 +1,242 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+       http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<configuration supports_adding_forbidden="true">
+  <property>
+    <name>data.basedir.path</name>
+    <value>/tmp/dolphinscheduler</value>
+    <description>user data local directory path, please make sure the directory exists and have read write permissions</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>resource.storage.type</name>
+    <value>HDFS</value>
+    <description>resource storage type: HDFS, S3, OSS, NONE</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>resource.storage.upload.base.path</name>
+    <value>/dolphinscheduler</value>
+    <description>
+    resource store on HDFS/S3 path, resource file will store to this base path, self configuration, please make sure the directory exists on hdfs and have read write permissions. "/dolphinscheduler" is recommended
+    </description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <!-- cloud -->
+  <!-- azure -->
+  <property>
+    <name>resource.azure.client.id</name>
+    <value>minioadmin</value>
+  </property>
+  <property>
+    <name>resource.azure.client.secret</name>
+    <value>minioadmin</value>
+  </property>
+  <property>
+    <name>resource.azure.subId</name>
+    <value>minioadmin</value>
+  </property>
+  <property>
+    <name>resource.azure.tenant.id</name>
+    <value>minioadmin</value>
+  </property>
+  <property>
+    <name>resource.query.interval</name>
+    <value>10000</value>
+  </property>
+  <!-- aws -->
+  <property>
+    <name>resource.aws.access.key.id</name>
+    <value>minioadmin</value>
+  </property>
+  <property>
+    <name>resource.aws.secret.access.key</name>
+    <value>minioadmin</value>
+  </property>
+  <property>
+    <name>resource.aws.region</name>
+    <value>cn-north-1</value>
+  </property>
+  <property>
+    <name>resource.aws.s3.bucket.name</name>
+    <value>dolphinscheduler</value>
+  </property>
+  <property>
+    <name>resource.aws.s3.endpoint</name>
+    <value>http://localhost:9000</value>
+  </property>
+  <!-- hdfs -->
+  <property>
+    <name>resource.hdfs.root.user</name>
+    <value>hdfs</value>
+    <description>
+    if resource.storage.type=HDFS, the user must have the permission to create directories under the HDFS root path
+    </description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>resource.hdfs.fs.defaultFS</name>
+    <value>hdfs://mycluster:8020</value>
+    <description>
+    if resource.storage.type=S3, the value like: s3a://dolphinscheduler; if resource.storage.type=HDFS and namenode HA is enabled, you need to copy core-site.xml and hdfs-site.xml to conf dir
+    </description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>hadoop.security.authentication.startup.state</name>
+    <value>false</value>
+    <description>whether to startup kerberos</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>java.security.krb5.conf.path</name>
+    <value>/opt/krb5.conf</value>
+    <description>java.security.krb5.conf path</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>login.user.keytab.username</name>
+    <value>hdfs-mycluster@ESZ.COM</value>
+    <description>login user from keytab username</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>login.user.keytab.path</name>
+    <value>/opt/hdfs.headless.keytab</value>
+    <description>login user from keytab path</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>kerberos.expire.time</name>
+    <value>2</value>
+    <description>kerberos expire time, the unit is hour</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>resource.manager.httpaddress.port</name>
+    <value>8088</value>
+    <description>resourcemanager port, the default value is 8088 if not specified</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.ha.rm.ids</name>
+    <value>192.168.xx.xx,192.168.xx.xx</value>
+    <description>if resourcemanager HA is enabled, please set the HA IPs; if resourcemanager is single, keep this value empty</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>yarn.application.status.address</name>
+    <value>http://ds1:%s/ws/v1/cluster/apps/%s</value>
+    <description>if resourcemanager HA is enabled or not use resourcemanager, please keep the default value; 
+    If resourcemanager is single, you only need to replace ds1 to actual resourcemanager hostname</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>yarn.job.history.status.address</name>
+    <value>http://ds1:19888/ws/v1/history/mapreduce/jobs/%s</value>
+    <description>job history status url when application number threshold is reached(default 10000, maybe it was set to 1000)</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>datasource.encryption.enable</name>
+    <value>false</value>
+    <description>datasource encryption enable</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>datasource.encryption.salt</name>
+    <value><![CDATA[!@#$%^&*]]></value>
+    <description>datasource encryption salt</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>support.hive.oneSession</name>
+    <value>false</value>
+    <description>Whether hive SQL is executed in the same session</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>sudo.enable</name>
+    <value>true</value>
+    <description>use sudo or not, if set true, executing user is tenant user and deploy user needs sudo permissions; if set false, executing user is the deploy user and doesn't need sudo permissions</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>dolphin.scheduler.network.interface.restrict</name>
+    <value>docker0</value>
+    <description>network interface restrict like docker0,docker1 , default: docker0</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>development.state</name>
+    <value>false</value>
+    <description>development state</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>alert.rpc.port</name>
+    <value>50052</value>
+    <description>rpc port</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>conda.path</name>
+    <value>/opt/anaconda3/etc/profile.d/conda.sh</value>
+    <description>set path of conda.sh</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>task.resource.limit.state</name>
+    <value>false</value>
+    <description>Task resource limit state</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>ml.mlflow.preset_repository</name>
+    <value>https://github.com/apache/dolphinscheduler-mlflow</value>
+    <description>mlflow task plugin preset repository</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>ml.mlflow.preset_repository_version</name>
+    <value>"main"</value>
+    <description>mlflow task plugin preset repository version</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>appId.collect</name>
+    <value>log</value>
+  </property>
+  <property>
+    <name>shell.env_source_list</name>
+    <value />
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>shell.interceptor.type</name>
+    <value>bash</value>
+  </property>
+  <property>
+    <name>remote.logging.enable</name>
+    <value>false</value>
+  </property>
+</configuration>

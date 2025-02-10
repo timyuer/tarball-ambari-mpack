@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<metainfo>
+  <schemaVersion>2.0</schemaVersion>
+  <services>
+    <service>
+      <name>ELASTICSEARCH</name>
+      <displayName>Elasticsearch</displayName>
+      <comment>Elasticsearch is a distributed, RESTful search and analytics engine capable of
+        addressing a growing number of use cases.</comment>
+      <version>7.17.3</version>
+      <components>
+        <component>
+          <name>ELASTICSEARCH_SERVER</name>
+          <displayName>Elasticsearch Server</displayName>
+          <category>MASTER</category>
+          <cardinality>1+</cardinality>
+          <timelineAppid>elasticsearch</timelineAppid>
+          <commandScript>
+            <script>scripts/elasticsearch_server.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>1800</timeout>
+          </commandScript>
+          <customCommands>
+            <customCommand>
+              <name>add_security_enabled</name>
+              <background>true</background>
+              <commandScript>
+                <script>scripts/elasticsearch_server.py</script>
+                <scriptType>PYTHON</scriptType>
+              </commandScript>
+            </customCommand>
+          </customCommands>
+        </component>
+        <component>
+          <name>KIBANA_SERVER</name>
+          <displayName>Kibana Server</displayName>
+          <category>SLAVE</category>
+          <cardinality>0-1</cardinality>
+          <commandScript>
+            <script>scripts/kibana_server.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>1200</timeout>
+          </commandScript>
+          <configFiles>
+            <configFile>
+              <type>xml</type>
+              <fileName>kibana-yml</fileName>
+              <dictionaryName>kibana-yml</dictionaryName>
+            </configFile>
+          </configFiles>
+        </component>
+      </components>
+
+      <commandScript>
+        <script>scripts/service_check.py</script>
+        <scriptType>PYTHON</scriptType>
+        <timeout>1800</timeout>
+      </commandScript>
+
+
+      <osSpecifics>
+        <osSpecific>
+          <osFamily>any</osFamily>
+        </osSpecific>
+      </osSpecifics>
+
+      <configuration-dependencies>
+        <config-type>elasticsearch-env</config-type>
+        <config-type>elasticsearch-yml</config-type>
+        <config-type>kibana-yml</config-type>
+      </configuration-dependencies>
+      <restartRequiredAfterChange>true</restartRequiredAfterChange>
+
+      <themes-dir>themes</themes-dir>
+      <themes>
+        <theme>
+          <fileName>theme.json</fileName>
+          <default>true</default>
+        </theme>
+      </themes>
+
+      <quickLinksConfigurations>
+        <quickLinksConfiguration>
+          <fileName>quicklinks.json</fileName>
+          <default>true</default>
+        </quickLinksConfiguration>
+      </quickLinksConfigurations>
+
+    </service>
+  </services>
+</metainfo>

@@ -1,0 +1,17 @@
+{
+  "general_deps": {
+    "_comment": "dependencies for flink",
+    "FLINK_HISTORYSERVER-INSTALL": [
+      "FLINK_CLIENT-INSTALL"
+    ],
+    "FLINK_HISTORYSERVER-START": [
+      "NAMENODE-START",
+      "DATANODE-START",
+      "RESOURCEMANAGER-START",
+      "NODEMANAGER-START"
+    ],
+    "FLINK_SERVICE_CHECK-SERVICE_CHECK": [
+      "FLINK_HISTORYSERVER-START"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+    "general_deps": {
+        "_comment": "dependencies for DORIS",
+        "BE-INSTALL": [
+            "FE-INSTALL"
+        ],
+        "BE-START": [
+            "FE-START"
+        ],
+        "FE-STOP": [
+            "BE-STOP"
+        ],
+        "DORIS_SERVICE_CHECK-SERVICE_CHECK": [
+            "FE-START",
+            "BE-START"
+        ]
+    }
+}

@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+       http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<configuration supports_adding_forbidden="true" supports_final="true">
+  <property>
+    <name>seatunnel_url</name>
+    <display-name>SeaTunnel download url</display-name>
+    <value>http://192.168.1.80:81/BDP/seatunnel/apache-seatunnel-2.3.8-bin.tar.gz</value>
+    <final>true</final>
+    <value-attributes>
+      <hidden>true</hidden>
+      <empty_value_valid>false</empty_value_valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>mysql_connector_url</name>
+    <display-name>mysql_connector url</display-name>
+    <value>http://192.168.1.80:81/BDP/seatunnel/mysql-connector-j-8.0.33.jar</value>
+    <final>true</final>
+    <value-attributes>
+      <hidden>true</hidden>
+      <empty_value_valid>false</empty_value_valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>sqlserver_connector_url</name>
+    <display-name>sqlserver_connector url</display-name>
+    <value>http://192.168.1.80:81/BDP/seatunnel/mssql-jdbc-12.4.1.jre8.jar</value>
+    <final>true</final>
+    <value-attributes>
+      <hidden>true</hidden>
+      <empty_value_valid>false</empty_value_valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>seatunnel_hadoop3_url</name>
+    <display-name>SeaTunnel hadoop lib</display-name>
+    <value>http://192.168.1.80:81/BDP/seatunnel/seatunnel-hadoop3-3.1.4-uber-2.3.8-optional.jar</value>
+    <final>true</final>
+    <value-attributes>
+      <hidden>true</hidden>
+      <empty_value_valid>false</empty_value_valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>seatunnel_connector_hive_url</name>
+    <display-name>SeaTunnel connector_hive</display-name>
+    <value>http://192.168.1.80:81/BDP/seatunnel/connector-hive-2.3.8.jar</value>
+    <final>true</final>
+    <value-attributes>
+      <hidden>true</hidden>
+      <empty_value_valid>false</empty_value_valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>seatunnel_connector_jdbc_url</name>
+    <display-name>SeaTunnel connector_jdbc</display-name>
+    <value>http://192.168.1.80:81/BDP/seatunnel/connector-jdbc-2.3.8.jar</value>
+    <final>true</final>
+    <value-attributes>
+      <hidden>true</hidden>
+      <empty_value_valid>false</empty_value_valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>seatunnel_connector_doris_url</name>
+    <display-name>SeaTunnel connector_doris</display-name>
+    <value>http://192.168.1.80:81/BDP/seatunnel/connector-doris-2.3.8.jar</value>
+    <final>true</final>
+    <value-attributes>
+      <hidden>true</hidden>
+      <empty_value_valid>false</empty_value_valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>seatunnel_connector_cdcmysql_url</name>
+    <display-name>SeaTunnel connector_cdcmysql</display-name>
+    <value>http://192.168.1.80:81/BDP/seatunnel/connector-cdc-mysql-2.3.8.jar</value>
+    <final>true</final>
+    <value-attributes>
+      <hidden>true</hidden>
+      <empty_value_valid>false</empty_value_valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>seatunnel_connector_cdcsqlserver_url</name>
+    <display-name>SeaTunnel connector_cdcsqlserver</display-name>
+    <value>http://192.168.1.80:81/BDP/seatunnel/connector-cdc-sqlserver-2.3.8.jar</value>
+    <final>true</final>
+    <value-attributes>
+      <hidden>true</hidden>
+      <empty_value_valid>false</empty_value_valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>seatunnel_connector_kafka_url</name>
+    <display-name>SeaTunnel connector_kafka</display-name>
+    <value>http://192.168.1.80:81/BDP/seatunnel/connector-kafka-2.3.8.jar</value>
+    <final>true</final>
+    <value-attributes>
+      <hidden>true</hidden>
+      <empty_value_valid>false</empty_value_valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>seatunnel_connector_es_url</name>
+    <display-name>SeaTunnel connector_es</display-name>
+    <value>http://192.168.1.80:81/BDP/seatunnel/connector-elasticsearch-2.3.8.jar</value>
+    <final>true</final>
+    <value-attributes>
+      <hidden>true</hidden>
+      <empty_value_valid>false</empty_value_valid>
+    </value-attributes>
+  </property>
+</configuration>

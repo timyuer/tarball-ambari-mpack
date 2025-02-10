@@ -1,0 +1,47 @@
+{
+  "name": "default",
+  "description": "default quick links configuration",
+  "configuration": {
+    "protocol": {
+      "type": "https",
+      "checks": [
+        {
+          "property": "es.head.http.policy",
+          "desired": "HTTPS_ONLY",
+          "site": "elasticsearch-yml"
+        }
+      ]
+    },
+    "links": [
+      {
+        "name": "elasticsearch_head_ui",
+        "label": "Elasticsearch-head UI",
+        "component_name": "ELASTICSEARCH_HEAD",
+        "url": "%@://%@:%@",
+        "port": {
+          "http_property": "elasticsearch_head_port",
+          "http_default_port": "9100",
+          "https_property": "elasticsearch_head_port",
+          "https_default_port": "9100",
+          "regex": "^(\\d+)$",
+          "site": "elasticsearch-yml"
+        }
+      },
+      {
+        "name": "kibana_ui",
+        "label": "Kibana UI",
+        "requires_user_name": "false",
+        "component_name": "KIBANA_SERVER",
+        "url": "%@://%@:%@",
+        "port": {
+          "http_property": "server.port",
+          "http_default_port": "5601",
+          "https_property": "server.port",
+          "https_default_port": "5601",
+          "regex": "\\w*:(\\d+)",
+          "site": "kibana-yml"
+        }
+      }
+    ]
+  }
+}

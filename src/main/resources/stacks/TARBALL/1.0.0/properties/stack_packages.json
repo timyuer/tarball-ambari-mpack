@@ -1,0 +1,466 @@
+{
+  "TARBALL": {
+    "stack-select": {
+      "HBASE": {
+        "HBASE_CLIENT": {
+          "STACK-SELECT-PACKAGE": "hbase-client",
+          "INSTALL": [
+            "hbase-client"
+          ],
+          "PATCH": [
+            "hbase-client"
+          ],
+          "STANDARD": [
+            "hbase-client",
+            "phoenix-client",
+            "hadoop-client"
+          ]
+        },
+        "HBASE_MASTER": {
+          "STACK-SELECT-PACKAGE": "hbase-master",
+          "INSTALL": [
+            "hbase-master",
+            "hbase-client"
+          ],
+          "PATCH": [
+            "hbase-master"
+          ],
+          "STANDARD": [
+            "hbase-master"
+          ]
+        },
+        "HBASE_REGIONSERVER": {
+          "STACK-SELECT-PACKAGE": "hbase-regionserver",
+          "INSTALL": [
+            "hbase-regionserver",
+            "hbase-client"
+          ],
+          "PATCH": [
+            "hbase-regionserver"
+          ],
+          "STANDARD": [
+            "hbase-regionserver"
+          ]
+        }
+      },
+      "HIVE": {
+        "HIVE_METASTORE": {
+          "STACK-SELECT-PACKAGE": "hive-metastore",
+          "INSTALL": [
+            "hive-metastore",
+            "hive-client"
+          ],
+          "PATCH": [
+            "hive-metastore"
+          ],
+          "STANDARD": [
+            "hive-metastore"
+          ]
+        },
+        "HIVE_SERVER": {
+          "STACK-SELECT-PACKAGE": "hive-server2",
+          "INSTALL": [
+            "hive-server2",
+            "hive-client"
+          ],
+          "PATCH": [
+            "hive-server2"
+          ],
+          "STANDARD": [
+            "hive-server2"
+          ]
+        },
+        "HIVE_CLIENT": {
+          "STACK-SELECT-PACKAGE": "hive-client",
+          "INSTALL": [
+            "hive-client"
+          ],
+          "PATCH": [
+            "hive-client"
+          ],
+          "STANDARD": [
+            "hadoop-client"
+          ]
+        },
+        "WEBHCAT_SERVER": {
+          "STACK-SELECT-PACKAGE": "hive-webhcat",
+          "INSTALL": [
+            "hive-webhcat",
+            "hive-client"
+          ],
+          "PATCH": [
+            "hive-webhcat"
+          ],
+          "STANDARD": [
+            "hive-webhcat"
+          ]
+        },
+        "HCAT": {
+          "STACK-SELECT-PACKAGE": "hive-webhcat",
+          "INSTALL": [
+            "hive-webhcat",
+            "hive-client"
+          ],
+          "PATCH": [
+            "hive-webhcat"
+          ],
+          "STANDARD": [
+            "hive-webhcat"
+          ]
+        }
+      },
+      "SPARK": {
+        "SPARK_CLIENT": {
+          "STACK-SELECT-PACKAGE": "spark-client",
+          "INSTALL": [
+            "spark-client"
+          ],
+          "PATCH": [
+            "spark-client"
+          ],
+          "STANDARD": [
+            "spark-client"
+          ]
+        },
+        "SPARK_JOBHISTORYSERVER": {
+          "STACK-SELECT-PACKAGE": "spark-historyserver",
+          "INSTALL": [
+            "spark-historyserver",
+            "spark-client"
+          ],
+          "PATCH": [
+            "spark-historyserver"
+          ],
+          "STANDARD": [
+            "spark-historyserver"
+          ]
+        },
+        "SPARK_THRIFTSERVER": {
+          "STACK-SELECT-PACKAGE": "spark-thriftserver",
+          "INSTALL": [
+            "spark-thriftserver",
+            "spark-client"
+          ],
+          "PATCH": [
+            "spark-thriftserver"
+          ],
+          "STANDARD": [
+            "spark-thriftserver"
+          ]
+        }
+      },
+      "LIVY": {
+        "LIVY_CLIENT": {
+          "STACK-SELECT-PACKAGE": "livy-client",
+          "INSTALL": [
+            "livy-client"
+          ],
+          "PATCH": [
+            "livy-client"
+          ],
+          "STANDARD": [
+            "livy-client"
+          ]
+        },
+        "LIVY_SERVER": {
+          "STACK-SELECT-PACKAGE": "livy-server",
+          "INSTALL": [
+            "livy-server"
+          ],
+          "PATCH": [
+            "livy-server"
+          ],
+          "STANDARD": [
+            "livy-server"
+          ]
+        }
+      },
+      "RANGER": {
+        "RANGER_ADMIN": {
+          "STACK-SELECT-PACKAGE": "ranger-admin",
+          "INSTALL": [
+            "ranger-admin"
+          ],
+          "PATCH": [
+            "ranger-admin"
+          ],
+          "STANDARD": [
+            "ranger-admin"
+          ]
+        },
+        "RANGER_TAGSYNC": {
+          "STACK-SELECT-PACKAGE": "ranger-tagsync",
+          "INSTALL": [
+            "ranger-tagsync"
+          ],
+          "PATCH": [
+            "ranger-tagsync"
+          ],
+          "STANDARD": [
+            "ranger-tagsync"
+          ]
+        },
+        "RANGER_USERSYNC": {
+          "STACK-SELECT-PACKAGE": "ranger-usersync",
+          "INSTALL": [
+            "ranger-usersync"
+          ],
+          "PATCH": [
+            "ranger-usersync"
+          ],
+          "STANDARD": [
+            "ranger-usersync"
+          ]
+        }
+      },
+      "RANGER_KMS": {
+        "RANGER_KMS_SERVER": {
+          "STACK-SELECT-PACKAGE": "ranger-kms",
+          "INSTALL": [
+            "ranger-kms"
+          ],
+          "PATCH": [
+            "ranger-kms"
+          ],
+          "STANDARD": [
+            "ranger-kms"
+          ]
+        }
+      },
+      "SOLR": {
+        "SOLR_SERVER": {
+          "STACK-SELECT-PACKAGE": "solr-server",
+          "INSTALL": [
+            "solr-server"
+          ],
+          "PATCH": [
+            "solr-server"
+          ],
+          "STANDARD": [
+            "solr-server"
+          ]
+        }
+      },
+      "TEZ": {
+        "TEZ_CLIENT": {
+          "STACK-SELECT-PACKAGE": "tez-client",
+          "INSTALL": [
+            "tez-client"
+          ],
+          "PATCH": [
+            "tez-client"
+          ],
+          "STANDARD": [
+            "hadoop-client"
+          ]
+        }
+      },
+      "ZEPPELIN": {
+        "ZEPPELIN_SERVER": {
+          "STACK-SELECT-PACKAGE": "zeppelin-server",
+          "INSTALL": [
+            "zeppelin-server"
+          ],
+          "PATCH": [
+            "zeppelin-server"
+          ],
+          "STANDARD": [
+            "zeppelin-server"
+          ]
+        }
+      }
+    },
+    "conf-select": {
+      "hadoop": [
+        {
+          "conf_dir": "/etc/hadoop/conf",
+          "current_dir": "{0}/current/hadoop-client/conf",
+          "component": "hadoop-client"
+        }
+      ],
+      "hbase": [
+        {
+          "conf_dir": "/etc/hbase/conf",
+          "current_dir": "{0}/current/hbase-client/conf",
+          "component": "hbase-client"
+        }
+      ],
+      "hive": [
+        {
+          "conf_dir": "/etc/hive/conf",
+          "current_dir": "{0}/current/hive-client/conf",
+          "component": "hive-client"
+        }
+      ],
+      "hive-hcatalog": [
+        {
+          "conf_dir": "/etc/hive-webhcat/conf",
+          "prefix": "/etc/hive-webhcat",
+          "current_dir": "{0}/current/hive-webhcat/etc/webhcat",
+          "component": "hive-webhcat"
+        },
+        {
+          "conf_dir": "/etc/hive-hcatalog/conf",
+          "prefix": "/etc/hive-hcatalog",
+          "current_dir": "{0}/current/hive-webhcat/etc/hcatalog",
+          "component": "hive-webhcat"
+        }
+      ],
+      "kafka": [
+        {
+          "conf_dir": "/etc/kafka/conf",
+          "current_dir": "{0}/current/kafka-broker/conf",
+          "component": "kafka-broker"
+        }
+      ],
+      "phoenix": [
+        {
+          "conf_dir": "/etc/phoenix/conf",
+          "current_dir": "{0}/current/phoenix-client/conf",
+          "component": "phoenix-client"
+        }
+      ],
+       "ranger-admin": [
+        {
+          "conf_dir": "/etc/ranger/admin/conf",
+          "current_dir": "{0}/current/ranger-admin/conf"
+        }
+      ],
+      "ranger-kms": [
+        {
+          "conf_dir": "/etc/ranger/kms/conf",
+          "current_dir": "{0}/current/ranger-kms/conf"
+        }
+      ],
+      "ranger-tagsync": [
+        {
+          "conf_dir": "/etc/ranger/tagsync/conf",
+          "current_dir": "{0}/current/ranger-tagsync/conf"
+        }
+      ],
+      "ranger-usersync": [
+        {
+          "conf_dir": "/etc/ranger/usersync/conf",
+          "current_dir": "{0}/current/ranger-usersync/conf"
+        }
+      ],
+      "spark": [
+        {
+          "conf_dir": "/etc/spark/conf",
+          "current_dir": "{0}/current/spark-client/conf",
+          "component": "spark-client"
+        }
+      ],
+      "flink": [
+        {
+          "conf_dir": "/etc/flink/conf",
+          "current_dir": "{0}/current/flink-client/conf",
+          "component": "flink-client"
+        }
+      ],
+      "solr": [
+        {
+          "conf_dir": "/etc/solr/conf",
+          "current_dir": "{0}/current/solr-server/conf",
+          "component": "solr-server"
+        }
+      ],
+      "tez": [
+        {
+          "conf_dir": "/etc/tez/conf",
+          "current_dir": "{0}/current/tez-client/conf",
+          "component": "tez-client"
+        }
+      ],
+      "zeppelin": [
+        {
+          "conf_dir": "/etc/zeppelin/conf",
+          "current_dir": "{0}/current/zeppelin-server/conf",
+          "component": "zeppelin-server"
+        }
+      ],
+      "zookeeper": [
+        {
+          "conf_dir": "/etc/zookeeper/conf",
+          "current_dir": "{0}/current/zookeeper-client/conf",
+          "component": "zookeeper-client"
+        }
+      ]
+    },
+    "conf-select-patching": {
+      "HBASE": {
+        "packages": [
+          "hbase"
+        ]
+      },
+      "HDFS": {
+        "packages": []
+      },
+      "HIVE": {
+        "packages": [
+          "hive",
+          "hive-hcatalog"
+        ]
+      },
+      "KAFKA": {
+        "packages": [
+          "kafka"
+        ]
+      },
+      "MAPREDUCE2": {
+        "packages": []
+      },
+      "RANGER": {
+        "packages": ["ranger-admin", "ranger-usersync", "ranger-tagsync"]
+      },
+      "RANGER_KMS": {
+        "packages": ["ranger-kms"]
+      },
+      "SPARK": {
+        "packages": [
+          "spark"
+        ]
+      },
+      "FLINK": {
+        "packages": [
+          "flink"
+        ]
+      },
+      "SOLR": {
+        "packages": [
+          "solr"
+        ]
+      },
+      "TEZ": {
+        "packages": [
+          "tez"
+        ]
+      },
+      "YARN": {
+        "packages": []
+      },
+      "ZEPPELIN": {
+        "packages": [
+          "zeppelin"
+        ]
+      },
+      "ZOOKEEPER": {
+        "packages": [
+          "zookeeper"
+        ]
+      }
+    },
+    "upgrade-dependencies": {
+      "HIVE": [
+        "TEZ",
+        "MAPREDUCE2"
+      ],
+      "TEZ": [
+        "HIVE"
+      ],
+      "MAPREDUCE2": [
+        "HIVE"
+      ]
+    }
+  }
+}

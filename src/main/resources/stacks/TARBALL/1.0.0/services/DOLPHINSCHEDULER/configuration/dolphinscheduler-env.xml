@@ -1,0 +1,194 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+       http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<configuration supports_adding_forbidden="true">
+  <property>
+    <name>dolphinscheduler_user</name>
+    <display-name>DolphinScheduler user</display-name>
+    <value>dolphinscheduler</value>
+    <description>DolphinScheduler user</description>
+    <property-type>USER</property-type>
+    <value-attributes>
+      <type>user</type>
+      <overridable>false</overridable>
+      <user-groups>
+        <property>
+          <type>cluster-env</type>
+          <name>user_group</name>
+        </property>
+        <property>
+          <type>dolphinscheduler-env</type>
+          <name>dolphinscheduler_group</name>
+        </property>
+      </user-groups>
+    </value-attributes>
+  </property>
+  <property>
+    <name>dolphinscheduler_group</name>
+    <display-name>DolphinScheduler User Group</display-name>
+    <value>dolphinscheduler</value>
+    <property-type>GROUP</property-type>
+    <description>DolphinScheduler user group.</description>
+  </property>
+  <property>
+    <name>dolphinscheduler_log_dir</name>
+    <display-name>DolphinScheduler log directory</display-name>
+    <value>/var/log/dolphinscheduler</value>
+    <description>DolphinScheduler log directory</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>dolphinscheduler_pid_dir</name>
+    <display-name>DolphinScheduler pid directory</display-name>
+    <value>/var/run/dolphinscheduler</value>
+    <description>DolphinScheduler pid directory</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>dolphinscheduler_database_user</name>
+    <value>dolphinscheduler</value>
+    <display-name>Database Username</display-name>
+    <description>username to use against metastore database</description>
+    <value-attributes>
+      <type>db_user</type>
+      <overridable>false</overridable>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property require-input="true">
+    <name>dolphinscheduler_database_password</name>
+    <value/>
+    <property-type>PASSWORD</property-type>
+    <display-name>Database Password</display-name>
+    <description>password to use against metastore database</description>
+    <value-attributes>
+      <type>password</type>
+      <overridable>false</overridable>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>dolphinscheduler_database_name</name>
+    <value>dolphinscheduler</value>
+    <description>Database name.</description>
+    <value-attributes>
+      <type>database</type>
+      <overridable>false</overridable>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>dolphinscheduler_database_host</name>
+    <value>127.0.0.1</value>
+    <description>Database host.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>dolphinscheduler_database_port</name>
+    <value>3306</value>
+    <description>Database port.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>dolphinscheduler_database_type</name>
+    <value>mysql</value>
+    <display-name>DolphinScheduler Database Type</display-name>
+    <description>
+      Property that determines whether the DolphinScheduler DB is managed by Ambari.
+    </description>
+    <value-attributes>
+      <overridable>false</overridable>
+      <type>value-list</type>
+      <entries_editable>false</entries_editable>
+      <entries>
+        <entry>
+          <value>mysql</value>
+          <label>MySQL</label>
+        </entry>
+        <entry>
+          <value>postgresql</value>
+          <label>PostgreSQL</label>
+        </entry>
+      </entries>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>content</name>
+    <display-name>DolphinScheduler env file template</display-name>
+    <description>This is the template for DolphinScheduler_env.sh file</description>
+    <value>
+      <![CDATA[
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# JAVA_HOME, will use it to start DolphinScheduler server
+export JAVA_HOME=${JAVA_HOME:-{{java_home}}}
+
+# Database related configuration, set database type, username and password
+# for mysql
+export DATABASE={{dolphinscheduler_database_type}}
+export SPRING_PROFILES_ACTIVE=${DATABASE}
+export SPRING_DATASOURCE_URL="jdbc:mysql://{{dolphinscheduler_database_host}}:{{dolphinscheduler_database_port}}/{{dolphinscheduler_database_name}}?useUnicode=true&characterEncoding=UTF-8&useSSL=false"
+export SPRING_DATASOURCE_USERNAME={{dolphinscheduler_database_user}}
+export SPRING_DATASOURCE_PASSWORD={{dolphinscheduler_database_password}}
+
+# DolphinScheduler server related configuration
+export SPRING_CACHE_TYPE=${SPRING_CACHE_TYPE:-none}
+export SPRING_JACKSON_TIME_ZONE=${SPRING_JACKSON_TIME_ZONE:-UTC}
+export MASTER_FETCH_COMMAND_NUM=${MASTER_FETCH_COMMAND_NUM:-10}
+
+# Registry center configuration, determines the type and link of the registry center
+export REGISTRY_TYPE=zookeeper
+export REGISTRY_ZOOKEEPER_CONNECT_STRING={{zookeeper_url}}
+
+# Tasks related configurations, need to change the configuration if you use the related tasks.
+export HADOOP_HOME=${HADOOP_HOME:-{{hadoop_home}}}
+export HADOOP_CONF_DIR=${HADOOP_CONF_DIR:-{{hadoop_conf_dir}}}
+export SPARK_HOME1=${SPARK_HOME1:-/opt/soft/spark1}
+export SPARK_HOME2=${SPARK_HOME2:-/opt/soft/spark2}
+export PYTHON_HOME=${PYTHON_HOME:-/opt/soft/python}
+export HIVE_HOME=${HIVE_HOME:-/opt/soft/hive}
+export FLINK_HOME=${FLINK_HOME:-{{flink_home}}}
+export DATAX_HOME=${DATAX_HOME:-/opt/soft/datax}
+export SEATUNNEL_HOME=${SEATUNNEL_HOME:-{{seatunnel_home}}}
+export CHUNJUN_HOME=${CHUNJUN_HOME:-/opt/soft/chunjun}
+
+export PATH=$HADOOP_HOME/bin:$SPARK_HOME1/bin:$SPARK_HOME2/bin:$PYTHON_HOME/bin:$JAVA_HOME/bin:$HIVE_HOME/bin:$FLINK_HOME/bin:$DATAX_HOME/bin:$SEATUNNEL_HOME/bin:$CHUNJUN_HOME/bin:$PATH
+      ]]>
+        </value>
+    <value-attributes>
+      <type>content</type>
+      <show-property-name>true</show-property-name>
+    </value-attributes>
+    <on-ambari-upgrade add="true" />
+  </property>
+</configuration>
