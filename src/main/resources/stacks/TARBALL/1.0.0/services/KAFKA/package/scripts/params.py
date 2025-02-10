@@ -43,6 +43,7 @@ stack_root = Script.get_stack_root()
 
 # This is expected to be of the form #.#.#.#
 stack_version_unformatted = config["clusterLevelParams"]["stack_version"]
+stack_version_formatted = format_stack_version(stack_version_unformatted)
 
 java_home = config["ambariLevelParams"]["java_home"]
 hostname = config["agentLevelParams"]["hostname"]
