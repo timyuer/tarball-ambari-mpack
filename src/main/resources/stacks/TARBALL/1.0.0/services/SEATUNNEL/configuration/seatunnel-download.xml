@@ -23,7 +23,7 @@
   <property>
     <name>seatunnel_url</name>
     <display-name>SeaTunnel download url</display-name>
-    <value>http://192.168.1.80:81/BDP/seatunnel/apache-seatunnel-2.3.8-bin.tar.gz</value>
+    <value>/seatunnel/apache-seatunnel-2.3.8-bin.tar.gz</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>
@@ -33,7 +33,7 @@
   <property>
     <name>mysql_connector_url</name>
     <display-name>mysql_connector url</display-name>
-    <value>http://192.168.1.80:81/BDP/seatunnel/mysql-connector-j-8.0.33.jar</value>
+    <value>/seatunnel/mysql-connector-j-8.0.33.jar</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>
@@ -43,7 +43,7 @@
   <property>
     <name>sqlserver_connector_url</name>
     <display-name>sqlserver_connector url</display-name>
-    <value>http://192.168.1.80:81/BDP/seatunnel/mssql-jdbc-12.4.1.jre8.jar</value>
+    <value>/seatunnel/mssql-jdbc-12.4.1.jre8.jar</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>
@@ -53,7 +53,7 @@
   <property>
     <name>seatunnel_hadoop3_url</name>
     <display-name>SeaTunnel hadoop lib</display-name>
-    <value>http://192.168.1.80:81/BDP/seatunnel/seatunnel-hadoop3-3.1.4-uber-2.3.8-optional.jar</value>
+    <value>/seatunnel/seatunnel-hadoop3-3.1.4-uber-2.3.8-optional.jar</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>
@@ -63,7 +63,7 @@
   <property>
     <name>seatunnel_connector_hive_url</name>
     <display-name>SeaTunnel connector_hive</display-name>
-    <value>http://192.168.1.80:81/BDP/seatunnel/connector-hive-2.3.8.jar</value>
+    <value>/seatunnel/connector-hive-2.3.8.jar</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>
@@ -73,7 +73,7 @@
   <property>
     <name>seatunnel_connector_jdbc_url</name>
     <display-name>SeaTunnel connector_jdbc</display-name>
-    <value>http://192.168.1.80:81/BDP/seatunnel/connector-jdbc-2.3.8.jar</value>
+    <value>/seatunnel/connector-jdbc-2.3.8.jar</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>
@@ -83,7 +83,7 @@
   <property>
     <name>seatunnel_connector_doris_url</name>
     <display-name>SeaTunnel connector_doris</display-name>
-    <value>http://192.168.1.80:81/BDP/seatunnel/connector-doris-2.3.8.jar</value>
+    <value>/seatunnel/connector-doris-2.3.8.jar</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>
@@ -93,7 +93,7 @@
   <property>
     <name>seatunnel_connector_cdcmysql_url</name>
     <display-name>SeaTunnel connector_cdcmysql</display-name>
-    <value>http://192.168.1.80:81/BDP/seatunnel/connector-cdc-mysql-2.3.8.jar</value>
+    <value>/seatunnel/connector-cdc-mysql-2.3.8.jar</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>
@@ -103,7 +103,7 @@
   <property>
     <name>seatunnel_connector_cdcsqlserver_url</name>
     <display-name>SeaTunnel connector_cdcsqlserver</display-name>
-    <value>http://192.168.1.80:81/BDP/seatunnel/connector-cdc-sqlserver-2.3.8.jar</value>
+    <value>/seatunnel/connector-cdc-sqlserver-2.3.8.jar</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>
@@ -113,7 +113,7 @@
   <property>
     <name>seatunnel_connector_kafka_url</name>
     <display-name>SeaTunnel connector_kafka</display-name>
-    <value>http://192.168.1.80:81/BDP/seatunnel/connector-kafka-2.3.8.jar</value>
+    <value>/seatunnel/connector-kafka-2.3.8.jar</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>
@@ -123,7 +123,7 @@
   <property>
     <name>seatunnel_connector_es_url</name>
     <display-name>SeaTunnel connector_es</display-name>
-    <value>http://192.168.1.80:81/BDP/seatunnel/connector-elasticsearch-2.3.8.jar</value>
+    <value>/seatunnel/connector-elasticsearch-2.3.8.jar</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>

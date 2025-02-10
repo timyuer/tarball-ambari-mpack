@@ -41,7 +41,8 @@ def install_tarball(env):
   config = Script.get_config()
 
   # zookeeper download
-  zookeeper_url = config['configurations']['zookeeper-download']['zookeeper_url']
+  repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
+  zookeeper_url = repo_base_url + config['configurations']['zookeeper-download']['zookeeper_url']
 
   Directory(params.zookeeper_home, action="delete")
 

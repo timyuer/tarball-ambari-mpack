@@ -41,7 +41,8 @@ def install_tarball(env, name):
   from resource_management.libraries.script.script import Script
   config = Script.get_config()
   # -------------------------------download tarball--------------------
-  doris_download_url = config['configurations']['doris-download']['doris_download_url']
+  repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
+  doris_download_url = repo_base_url + config['configurations']['doris-download']['doris_download_url']
 
   Directory(['/etc/doris'],
             mode=0755,

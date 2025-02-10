@@ -39,10 +39,11 @@ def install_tarball(env):
   env.set_params(params)
   from resource_management.libraries.script.script import Script
   config = Script.get_config()
+  repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
 
   # -------------------------------download tarball--------------------
-  dolphinscheduler_download_url = config['configurations']['dolphinscheduler-download']['dolphinscheduler_download_url']
-  mysql_connector_download_url = config['configurations']['dolphinscheduler-download']['mysql_connector_download_url']
+  dolphinscheduler_download_url = repo_base_url + config['configurations']['dolphinscheduler-download']['dolphinscheduler_download_url']
+  mysql_connector_download_url = repo_base_url + config['configurations']['dolphinscheduler-download']['mysql_connector_download_url']
 
   Directory(params.dolphinscheduler_home, action="delete")
 

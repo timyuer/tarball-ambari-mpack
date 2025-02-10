@@ -41,7 +41,8 @@ def install_tarball(env):
   config = Script.get_config()
 
   # kafka download
-  kafka_url = config['configurations']['kafka-download']['kafka_url']
+  repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
+  kafka_url = repo_base_url + config['configurations']['kafka-download']['kafka_url']
 
   Directory(params.kafka_home, action="delete")
 

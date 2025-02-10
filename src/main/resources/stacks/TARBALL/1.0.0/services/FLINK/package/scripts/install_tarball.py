@@ -40,14 +40,15 @@ def install_tarball(env):
   from resource_management.libraries.script.script import Script
   config = Script.get_config()
   # tarball download
-  flink_url = config['configurations']['flink-download']['flink_url']
-  flink_shaded_hadoop_url = config['configurations']['flink-download']['flink_shaded_hadoop_url']
-  commons_cli_url = config['configurations']['flink-download']['commons_cli_url']
-  rs_url = config['configurations']['flink-download']['rs_url']
-  jersey_core_url = config['configurations']['flink-download']['jersey_core_url']
-  jersey_common_url = config['configurations']['flink-download']['jersey_common_url']
-  flnk_jdbc_url = config['configurations']['flink-download']['flnk_jdbc_url']
-  flnk_kafka_url = config['configurations']['flink-download']['flnk_kafka_url']
+  repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
+  flink_url = repo_base_url + config['configurations']['flink-download']['flink_url']
+  flink_shaded_hadoop_url = repo_base_url + config['configurations']['flink-download']['flink_shaded_hadoop_url']
+  commons_cli_url = repo_base_url + config['configurations']['flink-download']['commons_cli_url']
+  rs_url = repo_base_url + config['configurations']['flink-download']['rs_url']
+  jersey_core_url = repo_base_url + config['configurations']['flink-download']['jersey_core_url']
+  jersey_common_url = repo_base_url + config['configurations']['flink-download']['jersey_common_url']
+  flnk_jdbc_url = repo_base_url + config['configurations']['flink-download']['flnk_jdbc_url']
+  flnk_kafka_url = repo_base_url + config['configurations']['flink-download']['flnk_kafka_url']
   
   flink_tgz_name = flink_url.split('/')[-1]
 

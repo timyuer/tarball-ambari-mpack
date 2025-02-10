@@ -23,7 +23,7 @@
   <property>
     <name>kafka_url</name>
     <display-name>kafka download url</display-name>
-    <value>http://192.168.1.80:81/BDP/kafka/kafka_2.12-3.7.2.tgz</value>
+    <value>/kafka/kafka_2.12-3.7.2.tgz</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>

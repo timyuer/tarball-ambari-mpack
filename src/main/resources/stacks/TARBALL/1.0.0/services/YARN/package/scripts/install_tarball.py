@@ -40,7 +40,8 @@ def install_tarball(env):
   from resource_management.libraries.script.script import Script
   config = Script.get_config()
   # tarball download
-  hadoop_url = config['configurations']['hadoop-download']['hadoop_url']
+  repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
+  hadoop_url = repo_base_url + config['configurations']['hadoop-download']['hadoop_url']
   stack_usr_bin = '/usr/bin'
 
   Directory(params.hadoop_home, action="delete")

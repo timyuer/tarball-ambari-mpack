@@ -39,10 +39,11 @@ def install_tarball(env, name='elasticsearch'):
   env.set_params(params)
   from resource_management.libraries.script.script import Script
   config = Script.get_config()
+  repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
 
   if name == 'elasticsearch':
     # tarball download
-    elasticsearch_url = config['configurations']['elasticsearch-download']['elasticsearch_url']
+    elasticsearch_url = repo_base_url + config['configurations']['elasticsearch-download']['elasticsearch_url']
     
     Directory(params.elastic_home, action="delete")
 
@@ -73,7 +74,7 @@ def install_tarball(env, name='elasticsearch'):
 
 
   elif name == 'kibana':
-    kibana_url = config['configurations']['elasticsearch-download']['kibana_url']
+    kibana_url = repo_base_url + config['configurations']['elasticsearch-download']['kibana_url']
 
     Directory(params.elastic_kibana_home, action="delete")
 

@@ -23,7 +23,7 @@
   <property>
     <name>zookeeper_url</name>
     <display-name>zookeeper download url</display-name>
-    <value>http://192.168.1.80:81/BDP/zookeeper/apache-zookeeper-3.8.4-bin.tar.gz</value>
+    <value>/zookeeper/apache-zookeeper-3.8.4-bin.tar.gz</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>

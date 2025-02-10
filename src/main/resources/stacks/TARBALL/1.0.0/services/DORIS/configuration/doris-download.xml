@@ -23,7 +23,7 @@
   <property>
     <name>doris_download_url</name>
     <display-name>Doris download url</display-name>
-    <value>http://192.168.1.80:81/BDP/doris/apache-doris-2.1.7-bin-x64-noavx2.tar.gz</value>
+    <value>/doris/apache-doris-2.1.7-bin-x64-noavx2.tar.gz</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>

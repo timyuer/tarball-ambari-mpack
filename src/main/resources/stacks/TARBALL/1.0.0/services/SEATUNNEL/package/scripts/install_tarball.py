@@ -39,19 +39,20 @@ def install_tarball(env):
   env.set_params(params)
   from resource_management.libraries.script.script import Script
   config = Script.get_config()
+  repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
 
   # tarball download
-  seatunnel_url = config['configurations']['seatunnel-download']['seatunnel_url']
-  seatunnel_hadoop3_url = config['configurations']['seatunnel-download']['seatunnel_hadoop3_url']
-  seatunnel_connector_hive_url = config['configurations']['seatunnel-download']['seatunnel_connector_hive_url']
-  seatunnel_connector_jdbc_url = config['configurations']['seatunnel-download']['seatunnel_connector_jdbc_url']
-  seatunnel_connector_doris_url = config['configurations']['seatunnel-download']['seatunnel_connector_doris_url']
-  seatunnel_connector_cdcmysql_url = config['configurations']['seatunnel-download']['seatunnel_connector_cdcmysql_url']
-  seatunnel_connector_kafka_url = config['configurations']['seatunnel-download']['seatunnel_connector_kafka_url']
-  seatunnel_connector_es_url = config['configurations']['seatunnel-download']['seatunnel_connector_es_url']
-  seatunnel_connector_cdcsqlserver_url = config['configurations']['seatunnel-download']['seatunnel_connector_cdcsqlserver_url']
-  mysql_connector_url = config['configurations']['seatunnel-download']['mysql_connector_url']
-  sqlserver_connector_url = config['configurations']['seatunnel-download']['sqlserver_connector_url']
+  seatunnel_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_url']
+  seatunnel_hadoop3_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_hadoop3_url']
+  seatunnel_connector_hive_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_hive_url']
+  seatunnel_connector_jdbc_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_jdbc_url']
+  seatunnel_connector_doris_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_doris_url']
+  seatunnel_connector_cdcmysql_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_cdcmysql_url']
+  seatunnel_connector_kafka_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_kafka_url']
+  seatunnel_connector_es_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_es_url']
+  seatunnel_connector_cdcsqlserver_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_cdcsqlserver_url']
+  mysql_connector_url = repo_base_url + config['configurations']['seatunnel-download']['mysql_connector_url']
+  sqlserver_connector_url = repo_base_url + config['configurations']['seatunnel-download']['sqlserver_connector_url']
 
   Directory(params.seatunnel_home, action="delete")
 
