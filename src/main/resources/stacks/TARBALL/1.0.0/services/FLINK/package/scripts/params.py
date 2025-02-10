@@ -30,7 +30,6 @@ from resource_management.libraries.functions import get_kinit_path
 from resource_management.libraries.functions.get_not_managed_resources import get_not_managed_resources
 from resource_management.libraries.script.script import Script
 import json
-import commands
 import socket
 import os
 import status_params

@@ -52,8 +52,6 @@ def install_tarball(env):
   
   flink_tgz_name = flink_url.split('/')[-1]
 
-  real_flink_home = format('{stack_root}/{stack_version_formatted}/usr/lib/flink')
-
   Directory(params.flink_home, action="delete")
 
   Directory(params.flink_home,

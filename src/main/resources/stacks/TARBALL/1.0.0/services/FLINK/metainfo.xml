@@ -28,7 +28,7 @@
         communication, and
         fault tolerance for distributed computations over data streams.
       </comment>
-      <version>1.17.1</version>
+      <version>1.17.2</version>
       <components>
         <component>
           <name>FLINK_HISTORYSERVER</name>
