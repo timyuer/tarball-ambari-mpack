@@ -19,7 +19,7 @@
 
 # Ambari Management Pack
 
-
+关于安装包的说明请参考[这里](src/main/package/README.md)
 
 ## Installing Management Pack
 ```bash
