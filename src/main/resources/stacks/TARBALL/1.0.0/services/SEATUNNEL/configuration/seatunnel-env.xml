@@ -71,12 +71,6 @@
     </value-attributes>
     <on-ambari-upgrade add="true" />
   </property>
-  <property>
-    <name>seatunnel_connectors_name</name>
-    <value>seatunnel</value>
-    <description />
-    <on-ambari-upgrade add="true" />
-  </property>
 
   <property>
     <name>seatunnel_user_nofile_soft</name>

@@ -64,8 +64,6 @@ seatunnel_bin_dir = os.path.join(seatunnel_home, 'bin')
 seatunnel_connectors_dir = os.path.join(seatunnel_home, 'connectors')
 seatunnel_plugins_dir = os.path.join(seatunnel_home, 'plugins')
 
-seatunnel_connectors_name = config['configurations']['seatunnel-env']['seatunnel_connectors_name']
-seatunnel_connectors_dest = os.path.join(seatunnel_connectors_dir, seatunnel_connectors_name)
 seatunnel_lib_dir = os.path.join(seatunnel_home, 'lib')
 
 seatunnel_log_dir = config['configurations']['seatunnel-env']['seatunnel_log_dir']
