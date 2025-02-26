@@ -1,0 +1,73 @@
+
+- name: 安装 Docker CE
+  yum:
+    name: docker-ce
+    state: present
+
+- name: 启动 Docker 服务
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: 创建 /opt/mysql 目录（如果不存在）
+  file:
+    path: /opt/mysql
+    state: directory
+    mode: "0755"
+
+- name: 下载 MySQL 镜像
+  get_url:
+    url: "{{ mysql_image_url }}"
+    dest: "{{ dest_path }}"
+    force: yes
+
+- name: 加载离线 Docker 镜像
+  shell: docker load -i "{{ dest_path }}" && rm -f "{{ dest_path }}"
+
+- name: 生成 my.cnf 配置文件
+  copy:
+    dest: /opt/mysql/my.cnf
+    content: |
+      [client]
+      default-character-set=utf8mb4
+      [mysql]
+      socket=/var/lib/mysql/mysql.sock
+      default-character-set=utf8mb4
+      [mysqld]
+      socket=/var/lib/mysql/mysql.sock
+      # Disabling symbolic-links is recommended to prevent assorted security risks
+      symbolic-links=0
+      log-error=/var/log/mysqld.log
+      pid-file=/var/run/mysqld/mysqld.pid
+      # 注意将数据目录修改为/opt/data目录,/opt/data目录的磁盘是独立挂载的大容量磁盘
+      datadir=/var/lib/mysql
+      character_set_server=utf8mb4
+      character-set-client-handshake=FALSE
+      collation-server=utf8mb4_unicode_ci
+      max_connections=800
+      max_connect_errors=1000
+      # ranger used
+      log_bin_trust_function_creators=1
+      # disable ssl
+      skip_ssl
+      log-bin=mysql-bin # 开启 binlog
+      binlog-format=ROW # 选择 ROW 模式
+      server_id=1 # 配置 MySQL replaction 需要定义，不要和 canal 的 slaveId 重复
+      # binlog_row_image参数,只在row模式下生效,包含full、minimal、noblob三个值
+      binlog_row_image=full
+      # bin log日志每达到设定大小后,会使用新的bin log日志
+      max_binlog_size=500M
+      # 保留指定日期范围内的bin log历史日志
+      expire_logs_days=15
+    mode: "0644"
+
+- name: 运行 MySQL 5.7.44 容器
+  shell: |
+    docker run --restart=always -it -d \
+    --network host \
+    --name mysql \
+    -v mysql_data:/var/lib/mysql \
+    -v /opt/mysql/my.cnf:/etc/mysql/my.cnf \
+    -e MYSQL_ROOT_PASSWORD=i@1LH*I%Wju9 \
+    mysql:5.7.44

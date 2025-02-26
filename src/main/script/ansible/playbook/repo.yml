@@ -1,0 +1,17 @@
+- name: Extract tarball name from URL
+  set_fact:
+    ambari_version: "{{ ambari_url | regex_replace('/$', '') | urlsplit('path') | basename }}"
+- debug:
+    msg:
+      - "ambari_version: {{ ambari_version }}"
+- name: remove Ambari repo file
+  file:
+    path: "/etc/yum.repos.d/ambari.repo"
+    state: absent
+- name: "Set Ambari-{{ ambari_version }} repo"
+  yum_repository:
+    name: ambari
+    description: "Ambari-{{ ambari_version }}"
+    baseurl: "{{ ambari_url }}"
+    gpgcheck: no
+    enabled: True

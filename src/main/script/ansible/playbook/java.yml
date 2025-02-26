@@ -1,0 +1,54 @@
+# 安装java和maven
+
+- name: Extract tarball name from URL
+  set_fact:
+    java_tarball: "{{ java_url | urlsplit('path') | basename }}"
+- debug:
+    msg:
+      - "java_tarball: {{ java_tarball }}"
+- name: Delete java directory
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "{{ java_home }}"
+    - /etc/profile.d/java.sh
+- name: Download java package
+  get_url:
+    url: "{{ java_url }}"
+    dest: "{{ java_tarball_dest }}"
+    force: yes
+    validate_certs: no
+- name: touch java dir
+  file:
+    path: "{{ java_home }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+- name: Unarchive java package
+  unarchive:
+    src: "/opt/{{ java_tarball }}"
+    dest: "{{ java_home }}"
+    keep_newer: True
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+- name: Setup JAVA_HOME
+  blockinfile:
+    backup: no
+    path: /etc/profile.d/java.sh
+    block: |
+      # set java home
+      export ES_JAVA_HOME={{ java_home }}
+      export JAVA_HOME={{ java_home }}
+      export PATH=$PATH:$JAVA_HOME/bin
+    state: present
+    create: True
+- name: Reload profile
+  shell: . /etc/profile
+- name: echo result
+  shell: ${JAVA_HOME}/bin/java -version
+  register: ok_var
+- debug:
+    msg: "{{ ok_var.stdout }}"

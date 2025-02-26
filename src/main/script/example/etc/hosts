@@ -1,0 +1,15 @@
+# Loopback entries; do not change.
+# For historical reasons, localhost precedes localhost.localdomain:
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+# See hosts(5) for proper format and other examples:
+# 192.168.1.10 foo.example.org foo
+# 192.168.1.13 bar.example.org bar
+
+
+192.168.8.197 bdp01.jndv.org bdp01
+192.168.8.198 bdp02.jndv.org bdp02
+192.168.8.199 bdp03.jndv.org bdp03
+192.168.8.200 bdp04.jndv.org bdp04
+192.168.8.201 bdp05.jndv.org bdp05
+192.168.8.202 bdp06.jndv.org bdp06

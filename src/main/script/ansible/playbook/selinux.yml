@@ -1,0 +1,18 @@
+# 关闭selinux
+- name: check selinux status
+  command: getenforce
+  register: selinux_status
+
+- name: disable selinux
+  command: setenforce 0
+  when: selinux_status.stdout != "Disabled"
+
+- name: make selinux changes persistent
+  lineinfile:
+    path: /etc/selinux/config
+    regexp: "^SELINUX="
+    line: "SELINUX=disabled"
+  when: selinux_status.stdout != "Disabled"
+- name: log result
+  debug:
+    msg: "Selinux disabled"

@@ -1,0 +1,19 @@
+# 关闭防火墙
+- name: stop and disable firewalld service
+  service:
+    name: firewalld
+    enabled: no
+    state: stopped
+
+- name: Check if firewalld service is active
+  shell: systemctl is-active firewalld
+  register: firewalld_status
+  failed_when: false
+
+- debug:
+    msg: "{{ firewalld_status.stdout }}"
+
+- name: Fail if firewalld service is active
+  fail:
+    msg: "Firewalld service is still active"
+  when: firewalld_status.stdout == "active"

@@ -1,0 +1,23 @@
+# 下载mysql驱动
+- name: 创建 /usr/share/java/ 目录（如果不存在）
+  file:
+    path: /usr/share/java/
+    state: directory
+    mode: "0755"
+- name: Extract tarball name from URL
+  set_fact:
+    mysql_driver_name: "{{ mysql_driver_url | urlsplit('path') | basename }}"
+- debug:
+    msg:
+      - "mysql_driver_name: {{ mysql_driver_name }}"
+- name: Download MySQL driver
+  get_url:
+    url: "{{ mysql_driver_url }}"
+    dest: /usr/share/java/
+    force: yes
+    validate_certs: no
+- name: Link MySQL driver
+  file:
+    state: link
+    src: /usr/share/java/{{ mysql_driver_name }}
+    dest: /usr/share/java/mysql-connector-java.jar

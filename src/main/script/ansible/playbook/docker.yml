@@ -1,0 +1,66 @@
+
+- name: 下载 Docker CE repo 文件
+  get_url:
+    url: "{{ docker_repo }}"
+    dest: /etc/yum.repos.d/docker-ce.repo
+
+- name: 替换 $releasever 为 9
+  replace:
+    path: /etc/yum.repos.d/docker-ce.repo
+    regexp: '\$releasever'
+    replace: '9'
+  when: ansible_facts['distribution'] == 'openEuler' and ansible_facts['distribution_major_version'] in ['22', '24']
+
+- name: 安装 Docker CE
+  yum:
+    name: docker-ce
+    state: present
+
+- name: 启动 Docker 服务
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: 确保 /etc/docker 目录存在
+  file:
+    path: /etc/docker
+    state: directory
+    mode: "0755"
+
+- name: 更新 /etc/docker/daemon.json 文件
+  copy:
+    dest: /etc/docker/daemon.json
+    content: |
+      {
+        "registry-mirrors": [
+          "https://huecher.io",
+          "https://dockerhub.timeweb.cloud",
+          "https://docker.m.daocloud.io"
+        ],
+        "log-driver": "json-file",
+        "log-opts": {
+          "max-size": "500m",
+          "max-file": "3"
+        }
+      }
+    mode: "0644"
+
+- name: 重启 Docker 服务以应用配置更改
+  service:
+    name: docker
+    state: restarted
+
+- name: 确保 Docker 环境变量已设置
+  shell: |
+    export DOCKER_HOST=unix:///var/run/docker.sock
+  args:
+    executable: /bin/bash
+
+- name: 检查 Docker 版本
+  command: docker version
+  register: docker_version_output
+
+- name: 显示 Docker 版本信息
+  debug:
+    msg: "{{ docker_version_output.stdout }}"

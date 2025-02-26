@@ -1,0 +1,33 @@
+
+- name: 打印facts
+  debug:
+    var: ansible_facts
+
+- name: Install Packages
+  yum:
+    name: ["vim", "wget", "curl", "telnet", "chrony", "tar", "gcc", "python3-libselinux"]
+    state: latest
+    update_cache: yes
+
+- name: Install epel-release on Rocky Linux
+  yum:
+    name: epel-release
+    state: latest
+    update_cache: yes
+  when: ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution'] == 'Rocky' and ansible_facts['distribution_major_version'] in ['8', '9']
+
+- name: Copy /etc/hosts to other nodes
+  copy:
+    src: /etc/hosts
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: 解锁普通用户执行su命令
+  lineinfile:
+    path: /etc/pam.d/su
+    regexp: '^auth\s+required\s+pam_wheel\.so\s+use_uid'
+    line: "#auth           required        pam_wheel.so use_uid"
+    state: present
+    backrefs: yes

@@ -1,0 +1,30 @@
+- name: install and start httpd
+  block:
+    - yum:
+        name: httpd
+        state: latest
+    - service:
+        name: httpd
+        enabled: yes
+        state: started
+- name: Remove welcome.conf
+  file:
+    path: /etc/httpd/conf.d/welcome.conf
+    state: absent
+- name: Restart httpd
+  service:
+    name: httpd
+    state: restarted
+
+- name: Check if httpd service is active
+  shell: systemctl is-active httpd
+  register: httpd_status
+  failed_when: false
+
+- debug:
+    msg: "{{ httpd_status.stdout }}"
+
+- name: Fail if httpd service is not active
+  fail:
+    msg: "httpd service is not active"
+  when: httpd_status.stdout != "active"

@@ -1,0 +1,166 @@
+# ##################################################################################################
+# 环境
+# Centos7
+# Rocky Linux 8,9
+# openEuler 22.03,24.03
+# 功能：
+# 1. 基础环境配置
+# 2. 关闭防火墙
+# 3. 关闭selinux
+# 4. 设置swap && 关闭透明大页面
+# 5. 设置repo
+# 6. 安装httpd
+# 7. 设置时钟同步服务
+# 8. 安装java环境
+# 9. 配置mysql驱动
+# 10. 安装mysql
+# 11. 安装ambari
+#
+# 执行前置条件:
+# 1. 安装ansible
+# 2. 确保节点免密登录
+#
+# 执行后需要重启所有节点
+#
+# 语法检查
+# ansible-playbook main.yml --syntax-check
+#
+# 使用
+# ansible-playbook main.yml \
+# -e timeserver=bdp01.jndv.org \
+# -e java_url="http://bdp01.jndv.org/BDP/base/zulu8.78.0.19-ca-jdk8.0.412-linux_x64.tar.gz" \
+# -e mysql_url="http://192.168.1.80:81/BDP/base/mysql-openeuler2203.tar.gz" \
+# -e mysql_driver_url="http://bdp01.jndv.org/BDP/base/mysql-connector-java-5.1.49.jar" \
+# -e ambari_url="http://bdp01.jndv.org/HDP3.3.2.0-011/2.7.8.0-211/" \
+# -e curl_url="http://192.168.1.80:81/BDP/base/curl-7.79.1-oe2203sp4.tar.gz"
+#
+# ##################################################################################################
+
+- name: 安装基础软件
+  hosts: all
+  vars:
+    curl_url: "http://192.168.1.80:81/BDP/base/curl-7.79.1-oe2203sp4.tar.gz"
+  tasks:
+    - name: 包含基础服务
+      include_tasks: base.yml
+    - name: 包含openEuler特定任务
+      include_tasks: openeuler.yml
+      when: ansible_facts['distribution'] == 'openEuler' and ansible_facts['distribution_major_version'] in ['22', '24']
+
+- name: 配置防火墙
+  hosts: all
+  tasks:
+    - name: 包含防火墙配置
+      include_tasks: firewall.yml
+
+- name: 配置SELinux
+  hosts: all
+  tasks:
+    - name: 包含SELinux配置
+      include_tasks: selinux.yml
+
+- name: 配置交换空间
+  hosts: all
+  tasks:
+    - name: 包含交换空间配置
+      include_tasks: swap.yml
+
+- name: 配置软件仓库
+  hosts: all
+  vars:
+    ambari_url: "http://192.168.1.80:81/HDP3.3.2.0-011/2.7.8.0-211/"
+  remote_user: root
+  tasks:
+    - name: 包含软件仓库配置
+      include_tasks: repo.yml
+
+- name: 安装httpd服务
+  hosts: master
+  remote_user: root
+  tasks:
+    - name: 包含httpd服务
+      include_tasks: httpd.yml
+
+- name: 设置主节点时钟同步服务
+  hosts: master
+  tasks:
+    - name: 设置主节点时钟同步服务
+      include_tasks: chrony-master.yml
+
+- name: 设置从节点时钟同步服务
+  hosts: slave
+  vars:
+    timeserver: 192.168.1.80
+  tasks:
+    - name: 设置从节点时钟同步服务
+      include_tasks: chrony-slave.yml
+
+- name: 安装Java
+  hosts: all
+  vars:
+    java_url: "http://192.168.1.80:81/BDP/base/zulu8.78.0.19-ca-jdk8.0.412-linux_x64.tar.gz"
+    java_tarball_dest: /opt/
+    java_home: /usr/local/java
+  tasks:
+    - name: 安装java和maven
+      include_tasks: java.yml
+
+- name: 安装MySQL驱动
+  vars:
+    mysql_driver_url: "http://192.168.1.80:81/BDP/base/mysql-connector-java-5.1.49.jar"
+  remote_user: root
+  hosts: all
+  tasks:
+    - name: 下载mysql驱动
+      include_tasks: mysql-driver.yml
+
+- name: 配置Docker
+  hosts: master
+  become: yes
+  vars:
+    docker_repo: "https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
+  tasks:
+    - include_tasks: docker.yml
+
+- name: 配置MySQL for Docker
+  hosts: master
+  become: yes
+  vars:
+    mysql_image_url: "http://192.168.1.80:81/BDP/base/mysql-5.7.44.tar"
+    dest_path: "/tmp/mysql-5.7.44.tar"
+  tasks:
+    - include_tasks: mysql5-docker.yml
+
+# - name: 配置MySQL for openEuler 22.03
+#   vars:
+#     mysql_url: "http://192.168.1.80:81/BDP/base/mysql-openeuler2203.tar.gz"
+#     mysql_tarball_dest: /opt/
+#     mysql_rpm_dest: "{{ mysql_tarball_dest }}/mysql"
+#   hosts: master
+#   tasks:
+#     - name: openEuler安装mysql,前提条件是关闭selinux
+#       include_tasks: mysql-openeuler.yml
+#       when: ansible_facts['distribution'] == 'openEuler' and ansible_facts['distribution_major_version'] in ['22', '24']
+
+# - name: 配置MySQL for CentOS 7
+#   hosts: master
+#   vars:
+#     mysql_url: "https://downloads.mysql.com/archives/get/p/23/file/mysql-5.7.44-1.el7.x86_64.rpm-bundle.tar"
+#     mysql_tarball_dest: /opt/
+#     mysql_rpm_dest: "{{ mysql_tarball_dest }}/mysql"
+#   remote_user: root
+#   tasks:
+#     - include_tasks: mysql-centos7.yml
+#       when: ansible_facts['distribution'] == 'Centos' and ansible_facts['distribution_major_version'] in ['7']
+
+# - name: 安装Ambari Server
+#   hosts: master
+#   task:
+#     - name: 安装ambari-server
+#       include_tasks: ambari-server.yml
+
+# - name: 安装Ambari Agent
+#   hosts: all
+#   task:
+#     - name: 安装ambari-agent
+#       include_tasks: ambari-agent.yml

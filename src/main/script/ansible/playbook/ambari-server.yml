@@ -1,0 +1,8 @@
+# 安装ambari
+# 为master节点安装依赖服务
+
+- name: Install Ambari-Server
+  yum:
+    name: ambari-server
+    state: installed
+    update_cache: yes
