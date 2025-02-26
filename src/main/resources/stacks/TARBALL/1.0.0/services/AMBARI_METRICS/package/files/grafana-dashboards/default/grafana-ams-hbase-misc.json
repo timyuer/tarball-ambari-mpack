@@ -1636,7 +1636,7 @@
       },
       {
         "allFormat": "glob",
-        "current": {},
+        "current": null,
         "datasource": null,
         "includeAll": false,
         "label": "Cluster",
@@ -1645,7 +1645,7 @@
         "name": "cluster",
         "options": [],
         "query": "cluster",
-        "refresh": 1,
+        "refresh": true,
         "regex": "",
         "type": "query"
       },
@@ -1670,7 +1670,7 @@
         ],
         "label": "Hosts",
         "query": "hosts.$cluster",
-        "refresh": 1,
+        "refresh": true,
         "regex": "",
         "type": "query"
       }
