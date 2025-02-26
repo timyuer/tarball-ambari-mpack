@@ -33,7 +33,7 @@
   <property>
     <name>mysql_connector_url</name>
     <display-name>mysql_connector url</display-name>
-    <value>/seatunnel/mysql-connector-j-8.0.33.jar</value>
+    <value>/base/mysql-connector-j-8.0.33.jar</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>
@@ -43,7 +43,7 @@
   <property>
     <name>sqlserver_connector_url</name>
     <display-name>sqlserver_connector url</display-name>
-    <value>/seatunnel/mssql-jdbc-12.4.1.jre8.jar</value>
+    <value>/base/mssql-jdbc-12.8.1.jre8.jar</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>

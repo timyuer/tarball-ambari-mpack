@@ -34,6 +34,11 @@
 
 ------------------------------------
 
+## base
+```bash
+https://repo.maven.apache.org/maven2/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar
+https://repo.maven.apache.org/maven2/com/microsoft/sqlserver/mssql-jdbc/12.8.1.jre8/mssql-jdbc-12.8.1.jre8.jar
+```
 
 ## zookeeper
 ```bash
@@ -74,6 +79,15 @@ https://apache-doris-releases.oss-accelerate.aliyuncs.com/apache-doris-2.1.7-bin
 ## seatunnel
 ```bash
 https://archive.apache.org/dist/seatunnel/2.3.8/apache-seatunnel-2.3.8-bin.tar.gz
+
+https://repo.maven.apache.org/maven2/org/apache/seatunnel/seatunnel-hadoop3-3.1.4-uber/2.3.8/seatunnel-hadoop3-3.1.4-uber-2.3.8-optional.jar
+https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-hive/2.3.8/connector-hive-2.3.8.jar
+https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-jdbc/2.3.8/connector-jdbc-2.3.8.jar
+https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-doris/2.3.8/connector-doris-2.3.8.jar
+https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-cdc-mysql/2.3.8/connector-cdc-mysql-2.3.8.jar
+https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-cdc-sqlserver/2.3.8/connector-cdc-sqlserver-2.3.8.jar
+https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-kafka/2.3.8/connector-kafka-2.3.8.jar
+https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-elasticsearch/2.3.8/connector-elasticsearch-2.3.8.jar
 ```
 
 ## dolphinscheduler
