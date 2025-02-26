@@ -46,5 +46,6 @@ header:
     - 'src/main/crontrib'
     - 'src/main/python'
     - '**/*.j2'
+    - 'src/main/script/example'
 
   comment: on-failure
