@@ -80,6 +80,7 @@
 
 - name: 运行 MySQL 5.7.44 容器
   shell: |
+    docker rm -f mysql && \
     docker run --restart=always -it -d \
     --network host \
     --name mysql \
