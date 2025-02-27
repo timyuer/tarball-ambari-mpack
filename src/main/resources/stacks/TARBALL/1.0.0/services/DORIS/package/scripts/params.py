@@ -73,7 +73,7 @@ doris_fe_pid_dir = status_params.doris_fe_pid_dir
 fe_pid_file = status_params.fe_pid_file
 
 # be
-be_home = os.path.join(ext_home, "doris-be")
+be_home = os.path.join(stack_version_home, "doris-be")
 be_home_conf_dir = format("{be_home}/conf")
 doris_be_log_dir = config["configurations"]["doris-env"]["doris_be_log_dir"]
 be_lib_dir = format("{be_home}/lib")

@@ -390,7 +390,7 @@ class KafkaRecommender(service_advisor.ServiceAdvisor):
         putKafkaBrokerProperty("listeners", listeners)
     except KeyError as e:
       self.logger.info(
-        f"Cannot replace PLAINTEXT to SASL_PLAINTEXT in listeners. KeyError: {e}"
+        "Cannot replace PLAINTEXT to SASL_PLAINTEXT in listeners. KeyError: {0}".format(e)
       )
 
   def recommendKAFKAConfigurationsFromHDP26(
