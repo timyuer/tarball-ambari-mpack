@@ -44,19 +44,19 @@
 #
 # 使用
 # ansible-playbook main.yml \
-# -e timeserver=bdp01.jndv.org \
-# -e java_url="http://bdp01.jndv.org/BDP/base/zulu8.78.0.19-ca-jdk8.0.412-linux_x64.tar.gz" \
-# -e mysql_url="http://192.168.1.80:81/BDP/base/mysql-openeuler2203.tar.gz" \
-# -e mysql_driver_url="http://bdp01.jndv.org/BDP/base/mysql-connector-java-5.1.49.jar" \
-# -e ambari_url="http://bdp01.jndv.org/HDP3.3.2.0-011/2.7.8.0-211/" \
-# -e curl_url="http://192.168.1.80:81/BDP/base/curl-7.79.1-oe2203sp4.tar.gz"
+# -e timeserver=repo.bdp.jndv.org \
+# -e java_url="http://repo.bdp.jndv.org/BDP/base/zulu8.78.0.19-ca-jdk8.0.412-linux_x64.tar.gz" \
+# -e mysql_url="http://repo.bdp.jndv.org/BDP/base/mysql-openeuler2203.tar.gz" \
+# -e mysql_driver_url="http://repo.bdp.jndv.org/BDP/base/mysql-connector-java-5.1.49.jar" \
+# -e ambari_url="http://repo.bdp.jndv.org/BDP/2.7.8.0-211/" \
+# -e curl_url="http://repo.bdp.jndv.org/BDP/base/curl-7.79.1-oe2203sp4.tar.gz"
 #
 # ##################################################################################################
 
 - name: 安装基础软件
   hosts: all
   vars:
-    curl_url: "http://bdp01.jndv.org/BDP/base/curl-7.79.1-oe2203sp4.tar.gz"
+    curl_url: "http://repo.bdp.jndv.org/BDP/base/curl-7.79.1-oe2203sp4.tar.gz"
   tasks:
     - name: 包含基础服务
       include_tasks: base.yml
@@ -85,7 +85,7 @@
 - name: 配置软件仓库
   hosts: all
   vars:
-    ambari_url: "http://bdp01.jndv.org/BDP/2.7.8.0-211/"
+    ambari_url: "http://repo.bdp.jndv.org/BDP/2.7.8.0-211/"
   remote_user: root
   tasks:
     - name: 包含软件仓库配置
@@ -115,7 +115,7 @@
 - name: 安装Java
   hosts: all
   vars:
-    java_url: "http://bdp01.jndv.org/BDP/base/zulu8.78.0.19-ca-jdk8.0.412-linux_x64.tar.gz"
+    java_url: "http://repo.bdp.jndv.org/BDP/base/zulu8.78.0.19-ca-jdk8.0.412-linux_x64.tar.gz"
     java_tarball_dest: /opt/
     java_home: /usr/local/java
   tasks:
@@ -124,7 +124,7 @@
 
 - name: 安装MySQL驱动
   vars:
-    mysql_driver_url: "http://bdp01.jndv.org/BDP/base/mysql-connector-java-5.1.49.jar"
+    mysql_driver_url: "http://repo.bdp.jndv.org/BDP/base/mysql-connector-java-5.1.49.jar"
   remote_user: root
   hosts: all
   tasks:
@@ -143,14 +143,14 @@
   hosts: master
   become: yes
   vars:
-    mysql_image_url: "http://bdp01.jndv.org/BDP/base/mysql-5.7.44.tar"
+    mysql_image_url: "http://repo.bdp.jndv.org/BDP/base/mysql-5.7.44.tar"
     dest_path: "/tmp/mysql-5.7.44.tar"
   tasks:
     - include_tasks: mysql5-docker.yml
 
 # - name: 配置MySQL for openEuler 22.03
 #   vars:
-#     mysql_url: "http://bdp01.jndv.org/BDP/base/mysql-openeuler2203.tar.gz"
+#     mysql_url: "http://repo.bdp.jndv.org/BDP/base/mysql-openeuler2203.tar.gz"
 #     mysql_tarball_dest: /opt/
 #     mysql_rpm_dest: "{{ mysql_tarball_dest }}/mysql"
 #   hosts: master

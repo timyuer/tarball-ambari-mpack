@@ -63,29 +63,29 @@ ansible all -m copy -a 'src=/etc/hosts dest=/etc'
 
 # ------------------ centos7 ------------------ #
 # ansible-playbook main.yml \
-# -e timeserver=bdp01.jndv.org \
-# -e java_url="http://bdp01.jndv.org/BDP/base/zulu8.78.0.19-ca-jdk8.0.412-linux_x64.tar.gz" \
-# -e mysql_driver_url="http://bdp01.jndv.org/BDP/base/mysql-connector-java-5.1.49.jar" \
-# -e mysql_image_url="http://bdp01.jndv.org/BDP/base/mysql-5.7.44.tar" \
-# -e ambari_url="http://bdp01.jndv.org/BDP/2.7.8.0-211/"
+# -e timeserver=repo.bdp.jndv.org \
+# -e java_url="http://repo.bdp.jndv.org/BDP/base/zulu8.78.0.19-ca-jdk8.0.412-linux_x64.tar.gz" \
+# -e mysql_driver_url="http://repo.bdp.jndv.org/BDP/base/mysql-connector-java-5.1.49.jar" \
+# -e mysql_image_url="http://repo.bdp.jndv.org/BDP/base/mysql-5.7.44.tar" \
+# -e ambari_url="http://repo.bdp.jndv.org/BDP/2.7.8.0-211/"
 
 
 # ------------------ openEuler-22.03 ------------------ #
 # ansible-playbook main.yml \
-# -e timeserver=bdp01.jndv.org \
-# -e java_url="http://bdp01.jndv.org/BDP/base/zulu8.78.0.19-ca-jdk8.0.412-linux_x64.tar.gz" \
-# -e mysql_driver_url="http://bdp01.jndv.org/BDP/base/mysql-connector-java-5.1.49.jar" \
-# -e mysql_image_url="http://bdp01.jndv.org/BDP/base/mysql-5.7.44.tar" \
-# -e ambari_url="http://bdp01.jndv.org/BDP/2.7.8.0-211/" \
-# -e curl_url="http://bdp01.jndv.org/BDP/base/curl-7.79.1-oe2203sp4.tar.gz" \
+# -e timeserver=repo.bdp.jndv.org \
+# -e java_url="http://repo.bdp.jndv.org/BDP/base/zulu8.78.0.19-ca-jdk8.0.412-linux_x64.tar.gz" \
+# -e mysql_driver_url="http://repo.bdp.jndv.org/BDP/base/mysql-connector-java-5.1.49.jar" \
+# -e mysql_image_url="http://repo.bdp.jndv.org/BDP/base/mysql-5.7.44.tar" \
+# -e ambari_url="http://repo.bdp.jndv.org/BDP/2.7.8.0-211/" \
+# -e curl_url="http://repo.bdp.jndv.org/BDP/base/curl-7.79.1-oe2203sp4.tar.gz" \
 # -e 'ansible_python_interpreter=/usr/bin/python3'
 
 
 # ------------------ rockylinux-9 ------------------ #
 # ansible-playbook main.yml \
-# -e timeserver=bdp01.jndv.org \
-# -e java_url="http://bdp01.jndv.org/BDP/base/zulu8.78.0.19-ca-jdk8.0.412-linux_x64.tar.gz" \
-# -e mysql_driver_url="http://bdp01.jndv.org/BDP/base/mysql-connector-java-5.1.49.jar" \
-# -e mysql_image_url="http://bdp01.jndv.org/BDP/base/mysql_5.7.44.tar" \
-# -e ambari_url="http://bdp01.jndv.org/BDP/2.7.8.0-211/" \
+# -e timeserver=repo.bdp.jndv.org \
+# -e java_url="http://repo.bdp.jndv.org/BDP/base/zulu8.78.0.19-ca-jdk8.0.412-linux_x64.tar.gz" \
+# -e mysql_driver_url="http://repo.bdp.jndv.org/BDP/base/mysql-connector-java-5.1.49.jar" \
+# -e mysql_image_url="http://repo.bdp.jndv.org/BDP/base/mysql_5.7.44.tar" \
+# -e ambari_url="http://repo.bdp.jndv.org/BDP/2.7.8.0-211/" \
 # -e 'ansible_python_interpreter=/usr/bin/python3'
