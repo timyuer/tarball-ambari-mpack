@@ -35,8 +35,17 @@ if __name__ == "__main__":
     # db.execute_update(sql)
 
     # query data
-    # result = db.execute_query("SELECT * FROM test.user LIMIT 10")
-    # print("query result:", result)
+    result = db.execute_query("SHOW FRONTENDS")
+    print("query result:", result)
+    for row in result:
+        print(row)
+        import json
+        print(json.dumps(row, indent=4))
+        json_dict = json.loads(json.dumps(row))
+        IsMaster = json_dict['IsMaster']
+        if IsMaster == "true":
+            print("Master: " + json_dict['Host'])
+            fe_master_host = json_dict['Host']
 
     # # insert data
     # insert_data = {

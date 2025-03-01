@@ -120,50 +120,82 @@ def doris_service(name, upgrade_type=None, action=None):
 def add_be():
     import params
     from doris_tool import DorisTool
-    # init DorisTool
-    db = DorisTool(
-        host=format("{params.fe_host}"),
-        user="root",
-        password="",
-        port = format("{params.query_port}"),
-        database="mysql"
-    )
-    # connect to database
-    db.connect()
+    try:
+        # init DorisTool
+        db = DorisTool(
+            host=format("{fe_host}"),
+            user="root",
+            password="",
+            port = format("{query_port}"),
+            database="mysql"
+        )
+        # connect to database
+        db.connect()
 
-    sql = format("ALTER SYSTEM ADD BACKEND '{hostname}:{heartbeat_service_port}'")
-    Logger.info("add_be: " + sql)
-    db.execute_update(sql)
-
-    # close database connection
-    db.close()
+        sql = format("ALTER SYSTEM ADD BACKEND '{hostname}:{heartbeat_service_port}'")
+        Logger.info("add_be: " + sql)
+        db.execute_update(sql)
+    finally:
+        # close database connection
+        db.close()
 
 
 def get_fe_master():
     import params
+    from doris_tool import DorisTool
+    try:
+        # init DorisTool
+        db = DorisTool(
+            host=format("{fe_host}"),
+            user="root",
+            password="",
+            port = format("{query_port}"),
+            database="mysql"
+        )
+        # connect to database
+        db.connect()
 
-    for h in params.fe_hosts:
-        try:
-            cmd = format(
-                "mysql -h{h} -uroot -P{query_port} -e 'SHOW FRONTENDS' | sed 's/\\t/,/g' | grep 'FOLLOWER,true' | cut -d',' -f2"
-            )
-            Logger.info("get_fe_master: " + cmd)
-            returncode, fe_master_host = call(
-                cmd, tries=5, try_sleep=10, logoutput=True, user=params.doris_user
-            )
-        except:
-            Logger.error("Connect {0} Failed !!!".format(h))
-            raise
-        if fe_master_host:
-            return fe_master_host
+        sql = "SHOW FRONTENDS"
+        Logger.info("get_fe_master: " + sql)
+        result = db.execute_query(sql)
+        print("query result:", result)
+        for row in result:
+            print(row)
+            import json
+            print(json.dumps(row, indent=4))
+            json_dict = json.loads(json.dumps(row))
+            IsMaster = json_dict['IsMaster']
+            if IsMaster == "true":
+                print("Master: " + json_dict['Host'])
+                fe_master_host = json_dict['Host']
+    except:
+        Logger.error("Connect {0} Failed !!!".format(params.fe_host))
+        raise
+    finally:
+        # close database connection
+        db.close()
+    if fe_master_host:
+        return fe_master_host
 
 
 def register_follower():
     import params
+    from doris_tool import DorisTool
+    try:
+        # init DorisTool
+        db = DorisTool(
+            host=format("{fe_host}"),
+            user="root",
+            password="",
+            port = format("{query_port}"),
+            database="mysql"
+        )
+        # connect to database
+        db.connect()
 
-    fe_master_host = get_fe_master()
-    cmd = format(
-        "mysql -h{fe_master_host} -uroot -P{query_port} -e \"ALTER SYSTEM ADD FOLLOWER '{hostname}:{edit_log_port}'\""
-    )
-    Logger.info("register_follower: " + cmd)
-    Execute(cmd, tries=1, try_sleep=10, logoutput=True, user=params.doris_user)
+        sql = format("ALTER SYSTEM ADD FOLLOWER '{hostname}:{edit_log_port}'")
+        Logger.info("register_follower: " + sql)
+        db.execute_update(sql)
+    finally:
+        # close database connection
+        db.close()
