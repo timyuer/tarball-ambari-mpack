@@ -119,12 +119,24 @@ def doris_service(name, upgrade_type=None, action=None):
 
 def add_be():
     import params
-
-    cmd = format(
-        "mysql -h{fe_host} -uroot -P{query_port} -e \"ALTER SYSTEM ADD BACKEND '{hostname}:{heartbeat_service_port}'\""
+    from doris_tool import DorisTool
+    # init DorisTool
+    db = DorisTool(
+        host=format("{params.fe_host}"),
+        user="root",
+        password="",
+        port = format("{params.query_port}"),
+        database="mysql"
     )
-    Logger.info("add_be: " + cmd)
-    Execute(cmd, tries=1, try_sleep=10, logoutput=True, user=params.doris_user)
+    # connect to database
+    db.connect()
+
+    sql = format("ALTER SYSTEM ADD BACKEND '{hostname}:{heartbeat_service_port}'")
+    Logger.info("add_be: " + sql)
+    db.execute_update(sql)
+
+    # close database connection
+    db.close()
 
 
 def get_fe_master():
