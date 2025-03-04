@@ -1,0 +1,16 @@
+# 
+- name: 包含基础服务
+  include_tasks: base.yml
+- name: 包含openEuler特定任务
+  include_tasks: openeuler.yml
+  when: ansible_facts['distribution'] == 'openEuler' and ansible_facts['distribution_major_version'] in ['22', '24']
+- name: 包含防火墙配置
+  include_tasks: firewall.yml
+- name: 包含SELinux配置
+  include_tasks: selinux.yml
+- name: 包含交换空间配置
+  include_tasks: swap.yml
+- name: 包含软件仓库配置
+  include_tasks: repo.yml
+- name: 包含httpd服务
+  include_tasks: httpd.yml

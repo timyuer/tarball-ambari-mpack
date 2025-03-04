@@ -133,7 +133,7 @@
 
 - name: 配置Docker
   hosts: master
-  become: yes
+  become: true
   vars:
     docker_repo: "https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
   tasks:
@@ -141,7 +141,7 @@
 
 - name: 配置MySQL for Docker
   hosts: master
-  become: yes
+  become: true
   vars:
     mysql_image_url: "http://repo.bdp.jndv.org/BDP/base/mysql-5.7.44.tar"
     dest_path: "/tmp/mysql-5.7.44.tar"

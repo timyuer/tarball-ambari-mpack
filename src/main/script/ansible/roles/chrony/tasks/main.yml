@@ -1,0 +1,7 @@
+- name: 设置主节点时钟同步服务
+  include_tasks: chrony-master.yml
+  when: "inventory_hostname in groups['master']"
+
+- name: 设置从节点时钟同步服务
+  include_tasks: chrony-slave.yml
+  when: "inventory_hostname in groups['slave']"
