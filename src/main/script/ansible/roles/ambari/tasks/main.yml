@@ -4,4 +4,3 @@
 
 - name: 安装ambari-agent
   include_tasks: ambari-agent.yml
-  when: "inventory_hostname in groups['slave']"

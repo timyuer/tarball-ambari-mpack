@@ -1,17 +1,17 @@
 ansible_python_interpreter: /usr/bin/python3
 # openEuler curl下载地址
-curl_url: "http://192.168.1.80:81/BDP/base/curl-7.79.1-oe2203sp4.tar.gz"
+curl_url: "http://192.168.1.80:81/tdp/x86_64/base/curl-7.79.1-oe2203sp4.tar.gz"
 # ambari下载地址
-ambari_url: "http://192.168.1.80:81/BDP/2.7.8.0-211/"
+ambari_url: "http://192.168.1.80:81/tdp/x86_64/2.7.8.0-211/"
 
-timeserver: 192.168.1.80
+timeserver: bdp01
 
-java_url: "http://192.168.1.80:81/BDP/base/zulu8.78.0.19-ca-jdk8.0.412-linux_x64.tar.gz"
+java_url: "http://192.168.1.80:81/tdp/x86_64/base/zulu8.78.0.19-ca-jdk8.0.412-linux_x64.tar.gz"
 java_tarball_dest: /opt/
 java_home: /usr/local/java
 
-mysql_driver_url: "http://192.168.1.80:81/BDP/base/mysql-connector-java-5.1.49.jar"
+mysql_driver_url: "http://192.168.1.80:81/tdp/x86_64/base/mysql-connector-j-8.0.33.jar"
 
 docker_repo: "https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
-mysql_image_url: "http://192.168.1.80:81/BDP/base/mysql-5.7.44.tar"
-dest_path: "/tmp/mysql-5.7.44.tar"
+mysql_image_url: "http://192.168.1.80:81/tdp/x86_64/base/mysql-8.0.41.tar"
+dest_path: "/tmp/mysql-8.0.41.tar"
