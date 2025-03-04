@@ -1,0 +1,12 @@
+{
+    "registry-mirrors": [
+        "https://huecher.io",
+        "https://dockerhub.timeweb.cloud",
+        "https://docker.m.daocloud.io"
+    ],
+    "log-driver": "json-file",
+    "log-opts": {
+        "max-size": "500m",
+        "max-file": "3"
+    }
+}

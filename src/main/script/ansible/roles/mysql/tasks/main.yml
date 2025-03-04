@@ -1,0 +1,7 @@
+#
+- name: 下载mysql驱动
+  include_tasks: mysql-driver.yml
+
+- include_tasks: docker.yml
+
+- include_tasks: mysql8-docker.yml

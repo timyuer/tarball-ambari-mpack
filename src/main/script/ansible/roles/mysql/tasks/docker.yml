@@ -46,20 +46,8 @@
 
 - name: 更新 /etc/docker/daemon.json 文件
   copy:
+    src: "{{ role_path }}/files/daemon.json"
     dest: /etc/docker/daemon.json
-    content: |
-      {
-        "registry-mirrors": [
-          "https://huecher.io",
-          "https://dockerhub.timeweb.cloud",
-          "https://docker.m.daocloud.io"
-        ],
-        "log-driver": "json-file",
-        "log-opts": {
-          "max-size": "500m",
-          "max-file": "3"
-        }
-      }
     mode: "0644"
 
 - name: 重启 Docker 服务以应用配置更改

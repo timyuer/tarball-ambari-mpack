@@ -6,3 +6,11 @@
 - hosts: all
   roles:
   - chrony
+
+- hosts: all
+  roles:
+  - java
+
+- hosts: master
+  roles:
+  - mysql

@@ -52,16 +52,10 @@
     extra_opts:
       - --strip-components=1
 - name: Setup JAVA_HOME
-  blockinfile:
-    backup: no
-    path: /etc/profile.d/java.sh
-    block: |
-      # set java home
-      export ES_JAVA_HOME={{ java_home }}
-      export JAVA_HOME={{ java_home }}
-      export PATH=$PATH:$JAVA_HOME/bin
-    state: present
-    create: True
+  template: 
+    src: java.conf.j2
+    dest: /etc/profile.d/java.sh
+    mode: 0644
 - name: Reload profile
   shell: . /etc/profile
 - name: echo result
