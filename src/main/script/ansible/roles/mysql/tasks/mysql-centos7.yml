@@ -86,44 +86,11 @@
   file:
     path: /etc/my.cnf
     state: absent
-- name: Add my.cnf
-  blockinfile:
-    backup: no
-    path: /etc/my.cnf
-    state: present
-    create: True
-    block: |
-      [client]
-      default-character-set=utf8mb4
-      [mysql]
-      socket=/var/lib/mysql/mysql.sock
-      default-character-set=utf8mb4
-      [mysqld]
-      socket=/var/lib/mysql/mysql.sock
-      # Disabling symbolic-links is recommended to prevent assorted security risks
-      symbolic-links=0
-      log-error=/var/log/mysqld.log
-      pid-file=/var/run/mysqld/mysqld.pid
-      # 注意将数据目录修改为/opt/data目录，/opt/data目录的磁盘是独立挂载的大容量磁盘
-      datadir=/opt/bdp/data01/mysql
-      character_set_server=utf8mb4
-      character-set-client-handshake=FALSE
-      collation-server=utf8mb4_unicode_ci
-      max_connections=800
-      max_connect_errors=1000
-      # ranger used
-      log_bin_trust_function_creators=1
-      # disable ssl
-      skip_ssl
-      log-bin=mysql-bin # 开启 binlog
-      binlog-format=ROW # 选择 ROW 模式
-      server_id=1 # 配置 MySQL replaction 需要定义，不要和 canal 的 slaveId 重复
-      # binlog_row_image参数，只在row模式下生效，包含full、minimal、noblob三个值
-      binlog_row_image=full
-      # bin log日志每达到设定大小后，会使用新的bin log日志
-      max_binlog_size=500M
-      # 保留指定日期范围内的bin log历史日志
-      expire_logs_days=15
+- name: 复制 my.cnf 配置文件
+  copy:
+    src: "{{ role_path }}/files/mysql5-my.cnf"
+    dest: /etc/my.cnf
+    mode: "0644"
 - name: Ensure mysql is running
   service:
     name: mysqld
