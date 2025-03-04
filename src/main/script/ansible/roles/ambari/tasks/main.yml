@@ -1,0 +1,7 @@
+- name: 安装ambari-server
+  include_tasks: ambari-server.yml
+  when: "inventory_hostname in groups['master']"
+
+- name: 安装ambari-agent
+  include_tasks: ambari-agent.yml
+  when: "inventory_hostname in groups['slave']"

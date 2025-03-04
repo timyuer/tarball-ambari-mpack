@@ -14,3 +14,7 @@
 - hosts: master
   roles:
   - mysql
+
+- hosts: all
+  roles:
+  - ambari
