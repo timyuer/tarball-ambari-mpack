@@ -47,6 +47,7 @@ header:
     - 'src/main/python'
     - '**/*.j2'
     - 'src/main/script/example'
+    - 'src/main/script/ansible'
     - 'src/main/resources/stacks/TARBALL/1.0.0/services/DORIS/package/lib'
 
   comment: on-failure

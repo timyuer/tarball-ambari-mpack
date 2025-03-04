@@ -1,0 +1,6 @@
+[master]  
+bdp01 ansible_host=192.168.1.1  
+
+[slave]  
+bdp02 ansible_host=192.168.1.2
+bdp03 ansible_host=192.168.1.3
