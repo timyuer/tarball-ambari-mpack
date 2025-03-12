@@ -86,6 +86,13 @@ def doris_service(name, upgrade_type=None, action=None):
             + as_sudo(["pgrep", "-F", params.be_pid_file])
         )
         try:
+            be_list = get_be_list()
+            if params.hostname in be_list:
+                Logger.info("This host is already in the backend list")
+            else:
+                Logger.info("This host is not in the backend list, add it")
+                add_be()
+
             Execute(
                 format("{be_bin_dir}/start_be.sh --daemon"),
                 user=params.doris_user,
@@ -139,9 +146,43 @@ def add_be():
         # close database connection
         db.close()
 
+def get_be_list():
+    import params
+    import json
+    from doris_tool import DorisTool
+    be_list = []
+    try:
+        # init DorisTool
+        db = DorisTool(
+            host=format("{fe_host}"),
+            user="root",
+            password="",
+            port = int(format("{query_port}")),
+            database="mysql"
+        )
+        # connect to database
+        db.connect()
+
+        sql = "SHOW BACKENDS"
+        Logger.info("get_be_list: " + sql)
+        result = db.execute_query(sql)
+        Logger.info("query result:" + json.dumps(result, indent=4))
+        for row in result:
+            json_dict = json.loads(json.dumps(row))
+            be_list.append(json_dict['Host'])
+    except:
+        Logger.error("Connect {0} Failed !!!".format(params.fe_host))
+        raise
+    finally:
+        # close database connection
+        db.close()
+    if len(be_list) > 0:
+        return be_list
+
 
 def get_fe_master():
     import params
+    import json
     from doris_tool import DorisTool
     try:
         # init DorisTool
@@ -158,15 +199,12 @@ def get_fe_master():
         sql = "SHOW FRONTENDS"
         Logger.info("get_fe_master: " + sql)
         result = db.execute_query(sql)
-        print("query result:", result)
+        Logger.info("query result:" + json.dumps(result, indent=4))
         for row in result:
-            print(row)
-            import json
-            print(json.dumps(row, indent=4))
             json_dict = json.loads(json.dumps(row))
             IsMaster = json_dict['IsMaster']
             if IsMaster == "true":
-                print("Master: " + json_dict['Host'])
+                Logger.info("Master: " + json_dict['Host'])
                 fe_master_host = json_dict['Host']
     except:
         Logger.error("Connect {0} Failed !!!".format(params.fe_host))

@@ -44,6 +44,14 @@
                 <scriptType>PYTHON</scriptType>
               </commandScript>
             </customCommand>
+            <customCommand>
+              <name>get_be_list</name>
+              <background>true</background>
+              <commandScript>
+                <script>scripts/fe.py</script>
+                <scriptType>PYTHON</scriptType>
+              </commandScript>
+            </customCommand>
           </customCommands>
         </component>
         <component>

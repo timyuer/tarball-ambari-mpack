@@ -66,5 +66,10 @@ class FE(Script):
     env.set_params(params)
     doris_service('fe', upgrade_type=upgrade_type, action='get_fe_master')
 
+  def get_be_list(self, env, upgrade_type=None):
+    import params
+    env.set_params(params)
+    doris_service('fe', upgrade_type=upgrade_type, action='get_be_list')
+
 if __name__ == "__main__":
   FE().execute()
