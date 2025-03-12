@@ -15,11 +15,14 @@
 # specific language governing permissions and limitations
 # under the License.
 
-# from resource_management.core.logger import Logger
+from resource_management.core.logger import Logger
 import sys 
-sys.path.append("..")
-import lib.pymysql as pymysql
-from lib.pymysql.cursors import DictCursor
+current_dir = sys.path[0]
+lib_dir = current_dir + "/../lib"
+Logger.info("lib_dir: " + lib_dir)
+sys.path.append(lib_dir)
+import pymysql as pymysql
+from pymysql.cursors import DictCursor
 
 class DorisTool:
     def __init__(self, host, user, password, database, port=9030, charset='utf8mb4'):

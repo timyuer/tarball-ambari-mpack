@@ -126,7 +126,7 @@ def add_be():
             host=format("{fe_host}"),
             user="root",
             password="",
-            port = format("{query_port}"),
+            port = int(format("{query_port}")),
             database="mysql"
         )
         # connect to database
@@ -149,7 +149,7 @@ def get_fe_master():
             host=format("{fe_host}"),
             user="root",
             password="",
-            port = format("{query_port}"),
+            port = int(format("{query_port}")),
             database="mysql"
         )
         # connect to database
@@ -187,7 +187,7 @@ def register_follower():
             host=format("{fe_host}"),
             user="root",
             password="",
-            port = format("{query_port}"),
+            port = int(format("{query_port}")),
             database="mysql"
         )
         # connect to database
