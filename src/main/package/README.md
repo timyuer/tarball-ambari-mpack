@@ -48,6 +48,9 @@ https://archive.apache.org/dist/zookeeper/zookeeper-3.8.4/apache-zookeeper-3.8.4
 ## hadoop
 ```bash
 https://archive.apache.org/dist/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
+
+# aarch64
+https://archive.apache.org/dist/hadoop/common/hadoop-3.3.6/hadoop-3.3.6-aarch64.tar.gz
 ```
 
 ## kafka
@@ -74,6 +77,9 @@ https://repo.maven.apache.org/maven2/org/glassfish/jersey/core/jersey-common/2.3
 ## doris
 ```bash
 https://apache-doris-releases.oss-accelerate.aliyuncs.com/apache-doris-2.1.7-bin-x64-noavx2.tar.gz
+
+# aarch64
+https://apache-doris-releases.oss-accelerate.aliyuncs.com/apache-doris-2.1.7-bin-arm64.tar.gz
 ```
 
 ## seatunnel
@@ -101,4 +107,9 @@ https://archive.apache.org/dist/dolphinscheduler/3.2.2/apache-dolphinscheduler-3
 https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.17.3-linux-x86_64.tar.gz
 # kibana-7.17.3-linux-x86_64.tar.gz
 https://artifacts.elastic.co/downloads/kibana/kibana-7.17.3-linux-x86_64.tar.gz
+
+
+https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.17.3-linux-aarch64.tar.gz
+
+https://artifacts.elastic.co/downloads/kibana/kibana-7.17.3-linux-aarch64.tar.gz
 ```
