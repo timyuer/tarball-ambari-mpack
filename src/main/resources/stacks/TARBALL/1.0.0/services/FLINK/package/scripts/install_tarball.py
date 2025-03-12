@@ -54,14 +54,7 @@ def install_tarball(env):
 
   Directory(params.flink_home, action="delete")
 
-  Directory(params.flink_home,
-            mode=0755,
-            cd_access='a',
-            owner=params.flink_user,
-            group=params.user_group,
-            create_parents=True
-            )
-  Directory('/etc/flink',
+  Directory([params.flink_home, '/etc/flink', params.stack_root + "/current"],
             mode=0755,
             cd_access='a',
             owner=params.flink_user,

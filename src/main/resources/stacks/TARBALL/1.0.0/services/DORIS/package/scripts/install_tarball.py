@@ -44,7 +44,7 @@ def install_tarball(env, name):
   repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
   doris_download_url = repo_base_url + config['configurations']['doris-download']['doris_download_url']
 
-  Directory(['/etc/doris'],
+  Directory(['/etc/doris', params.stack_root + "/current"],
             mode=0755,
             cd_access='a',
             owner=params.doris_user,

@@ -86,19 +86,19 @@ def doris_service(name, upgrade_type=None, action=None):
             + as_sudo(["pgrep", "-F", params.be_pid_file])
         )
         try:
-            be_list = get_be_list()
-            if params.hostname in be_list:
-                Logger.info("This host is already in the backend list")
-            else:
-                Logger.info("This host is not in the backend list, add it")
-                add_be()
-
             Execute(
                 format("{be_bin_dir}/start_be.sh --daemon"),
                 user=params.doris_user,
                 not_if=be_no_op_test,
                 environment={"JAVA_HOME": params.java_home},
             )
+
+            be_list = get_be_list()
+            if params.hostname in be_list:
+                Logger.info("This host is already in the backend list")
+            else:
+                Logger.info("This host is not in the backend list, add it")
+                add_be()
         except:
             show_logs(params.doris_be_log_dir, user=params.doris_user)
             raise
@@ -109,7 +109,7 @@ def doris_service(name, upgrade_type=None, action=None):
                 format("{be_bin_dir}/stop_be.sh"),
                 user=params.doris_user,
                 environment={"JAVA_HOME": params.java_home},
-                ignore_failures=False,
+                ignore_failures=True,
             )
         except:
             show_logs(params.doris_be_log_dir, user=params.doris_user)
@@ -176,8 +176,7 @@ def get_be_list():
     finally:
         # close database connection
         db.close()
-    if len(be_list) > 0:
-        return be_list
+    return be_list
 
 
 def get_fe_master():

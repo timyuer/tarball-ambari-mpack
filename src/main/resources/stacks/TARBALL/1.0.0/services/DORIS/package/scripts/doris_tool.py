@@ -44,22 +44,29 @@ class DorisTool:
         self.connection = None
         self.cursor = None
 
-    def connect(self):
-        """Connect to the database"""
-        try:
-            self.connection = pymysql.connect(
-                host=self.host,
-                user=self.user,
-                password=self.password,
-                database=self.database,
-                port=self.port,
-                charset=self.charset,
-                cursorclass=DictCursor  # return results as dictionaries
-            )
-            self.cursor = self.connection.cursor()
-            print("Database connected")
-        except pymysql.Error as e:
-            print("Failed to connect to database: ".format(e))
+    def connect(self, max_retries=10, retry_delay=10):
+        import time
+
+        for attempt in range(max_retries):
+            try:
+                self.connection = pymysql.connect(
+                    host=self.host,
+                    user=self.user,
+                    password=self.password,
+                    database=self.database,
+                    port=self.port,
+                    charset=self.charset,
+                    cursorclass=DictCursor  # return results as dictionaries
+                )
+                self.cursor = self.connection.cursor()
+                break  # exit loop if connection is successful
+            except pymysql.Error as err:
+                Logger.error("Connect to {0} Failed on attempt {1}/{2} !!!".format(self.host, attempt + 1, max_retries))
+                Logger.error(str(err))
+                if attempt < max_retries - 1:
+                    time.sleep(retry_delay)
+                else:
+                    raise
 
     def close(self):
         """Close the database connection"""
