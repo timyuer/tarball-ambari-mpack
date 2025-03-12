@@ -21,6 +21,7 @@
     name: firewalld
     enabled: no
     state: stopped
+  failed_when: false
 
 - name: Check if firewalld service is active
   shell: systemctl is-active firewalld
