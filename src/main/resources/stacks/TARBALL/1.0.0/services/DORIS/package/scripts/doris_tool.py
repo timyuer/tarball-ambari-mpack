@@ -17,8 +17,8 @@
 
 from resource_management.core.logger import Logger
 import sys 
-current_dir = sys.path[0]
-lib_dir = current_dir + "/../lib"
+current_file_dir = sys.path[0]
+lib_dir = current_file_dir + "/../lib"
 Logger.info("lib_dir: " + lib_dir)
 sys.path.append(lib_dir)
 import pymysql as pymysql
