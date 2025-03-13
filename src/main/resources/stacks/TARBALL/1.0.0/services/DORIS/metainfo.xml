@@ -67,7 +67,7 @@
           </commandScript>
           <customCommands>
             <customCommand>
-              <name>add_be</name>
+              <name>register_be</name>
               <background>true</background>
               <commandScript>
                 <script>scripts/be.py</script>

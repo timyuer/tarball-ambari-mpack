@@ -53,12 +53,30 @@ def doris_service(name, upgrade_type=None, action=None):
             + as_sudo(["pgrep", "-F", params.fe_pid_file])
         )
         try:
-            Execute(
-                format("{fe_bin_dir}/start_fe.sh --daemon"),
-                user=params.doris_user,
-                not_if=fe_no_op_test,
-                environment={"JAVA_HOME": params.java_home},
-            )
+            # register follower before start fe
+            fe_maser_host, fe_list = get_fe_list()
+            if params.hostname in fe_list:
+                Logger.info("This host is already in the FRONTENDS list")
+                # start fe
+                Execute(
+                    format("{fe_bin_dir}/start_fe.sh --daemon"),
+                    user=params.doris_user,
+                    not_if=fe_no_op_test,
+                    environment={"JAVA_HOME": params.java_home},
+                )
+            else:
+                Logger.info("This host is not in the FRONTENDS list, add it")
+                register_follower()
+
+                # start fe
+                Execute(
+                    format("{fe_bin_dir}/start_fe.sh --helper {fe_maser_host}:{edit_log_port} --daemon"),
+                    user=params.doris_user,
+                    not_if=fe_no_op_test,
+                    environment={"JAVA_HOME": params.java_home},
+                )
+
+
         except:
             show_logs(params.doris_fe_log_dir, user=params.doris_user)
             raise
@@ -86,19 +104,16 @@ def doris_service(name, upgrade_type=None, action=None):
             + as_sudo(["pgrep", "-F", params.be_pid_file])
         )
         try:
+            # register backend before start be
+            register_be()
+
+            # start be
             Execute(
                 format("{be_bin_dir}/start_be.sh --daemon"),
                 user=params.doris_user,
                 not_if=be_no_op_test,
                 environment={"JAVA_HOME": params.java_home},
             )
-
-            be_list = get_be_list()
-            if params.hostname in be_list:
-                Logger.info("This host is already in the backend list")
-            else:
-                Logger.info("This host is not in the backend list, add it")
-                add_be()
         except:
             show_logs(params.doris_be_log_dir, user=params.doris_user)
             raise
@@ -117,14 +132,17 @@ def doris_service(name, upgrade_type=None, action=None):
 
         File(params.be_pid_file, action="delete")
 
-    elif action == "add_be" and name == "be":
-        add_be()
+    elif action == "register_be" and name == "be":
+        register_be()
 
     elif action == "get_fe_master" and name == "fe":
         get_fe_master()
 
+    elif action == "get_be_list" and name == "fe":
+        get_be_list()
 
-def add_be():
+
+def register_be():
     import params
     from doris_tool import DorisTool
     try:
@@ -139,9 +157,14 @@ def add_be():
         # connect to database
         db.connect()
 
-        sql = format("ALTER SYSTEM ADD BACKEND '{hostname}:{heartbeat_service_port}'")
-        Logger.info("add_be: " + sql)
-        db.execute_update(sql)
+        be_list = get_be_list()
+        if params.hostname in be_list:
+            Logger.info("This host is already in the backend list")
+        else:
+            Logger.info("This host is not in the backend list, add it")
+            sql = format("ALTER SYSTEM ADD BACKEND '{hostname}:{heartbeat_service_port}'")
+            Logger.info("add_be: " + sql)
+            db.execute_update(sql)
     finally:
         # close database connection
         db.close()
@@ -180,9 +203,15 @@ def get_be_list():
 
 
 def get_fe_master():
+    fe_maser_host, fe_list = get_fe_list()
+    return fe_maser_host
+
+def get_fe_list():
     import params
     import json
     from doris_tool import DorisTool
+    fe_list = []
+    fe_master_host = params.fe_host
     try:
         # init DorisTool
         db = DorisTool(
@@ -201,6 +230,7 @@ def get_fe_master():
         Logger.info("query result:" + json.dumps(result, indent=4))
         for row in result:
             json_dict = json.loads(json.dumps(row))
+            fe_list.append(json_dict['Host'])
             IsMaster = json_dict['IsMaster']
             if IsMaster == "true":
                 Logger.info("Master: " + json_dict['Host'])
@@ -211,8 +241,8 @@ def get_fe_master():
     finally:
         # close database connection
         db.close()
-    if fe_master_host:
-        return fe_master_host
+    
+    return (fe_master_host, fe_list)
 
 
 def register_follower():
@@ -230,9 +260,19 @@ def register_follower():
         # connect to database
         db.connect()
 
-        sql = format("ALTER SYSTEM ADD FOLLOWER '{hostname}:{edit_log_port}'")
-        Logger.info("register_follower: " + sql)
-        db.execute_update(sql)
+        fe_maser_host, fe_list = get_fe_list()
+        if params.hostname == fe_maser_host:
+            Logger.info("This host is the master, no need to register follower")
+            return
+
+        if params.hostname in fe_list:
+            Logger.info("This host is already in the FRONTENDS list")
+        else:
+            Logger.info("This host is not in the FRONTENDS list, add it")
+
+            sql = format("ALTER SYSTEM ADD FOLLOWER '{hostname}:{edit_log_port}'")
+            Logger.info("register_follower: " + sql)
+            db.execute_update(sql)
     finally:
         # close database connection
         db.close()

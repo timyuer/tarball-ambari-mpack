@@ -69,11 +69,11 @@ class BE(Script):
         env.set_params(params)
         check_process_status(status_params.be_pid_file)
 
-    def add_be(self, env, upgrade_type=None):
+    def register_be(self, env, upgrade_type=None):
         import params
 
         env.set_params(params)
-        doris_service("be", upgrade_type=upgrade_type, action="add_be")
+        doris_service("be", upgrade_type=upgrade_type, action="register_be")
 
 
 if __name__ == "__main__":
