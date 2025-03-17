@@ -43,9 +43,14 @@ def calculate_folder_md5(path):
     md5_hash.update(filename.encode('utf-8'))
   return md5_hash.hexdigest()
 
-def re_install(env, tarball_path):
+def re_install(env, hadoop_url):
   import params
   env.set_params(params)
+
+  tarball_name = hadoop_url.split('/')[-1]
+  Execute('wget -O {0} {1}'.format('/tmp/' + tarball_name, hadoop_url))
+  tarball_path = '/tmp/' + tarball_name
+
   Execute('rm -rf /opt/hadoop && mkdir -p /opt/hadoop')
   Execute('tar -zxvf {0} -C {1} --strip-components=1'.format(tarball_path, "/opt/hadoop"))
   md5_flag  = calculate_folder_md5("/opt/hadoop") == calculate_folder_md5(params.hadoop_home)
@@ -66,11 +71,8 @@ def install_tarball(env):
   repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
   hadoop_url = repo_base_url + config['configurations']['hadoop-download']['hadoop_url']
   stack_usr_bin = '/usr/bin'
-
-  tarball_name = hadoop_url.split('/')[-1]
-  Execute('wget -O {0} {1}'.format('/tmp/' + tarball_name, hadoop_url))
   
-  re_install(env, '/tmp/' + tarball_name)
+  re_install(env, hadoop_url)
 
   Directory([params.hadoop_home, params.hdfs_log_dir_prefix, params.hadoop_pid_dir_prefix],
             mode=0755,
