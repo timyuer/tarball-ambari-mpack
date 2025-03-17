@@ -33,6 +33,30 @@ import re
 
 from resource_management.core.logger import Logger
 
+def calculate_folder_md5(path):
+  import os
+  import hashlib
+  md5_hash = hashlib.md5()
+  files = os.listdir(path)
+  files.sort()
+  for filename in files:
+    md5_hash.update(filename.encode('utf-8'))
+  return md5_hash.hexdigest()
+
+def re_install(env, tarball_path):
+  import params
+  env.set_params(params)
+  Execute('rm -rf /opt/hadoop && mkdir -p /opt/hadoop')
+  Execute('tar -zxvf {0} -C {1} --strip-components=1'.format(tarball_path, "/opt/hadoop"))
+  md5_flag  = calculate_folder_md5("/opt/hadoop") == calculate_folder_md5(params.hadoop_home)
+  if not md5_flag:
+    Logger.info("md5 is not equal, will re-install tarball")
+    Directory(params.hadoop_home, action="delete")
+    Execute('tar -zxf {0} -C {1} --strip-components=1 && rm -f {0}'.format(tarball_path, params.hadoop_home))
+  else:
+    Logger.info("md5 is equal, will not re-install tarball")
+  Execute('rm -rf /opt/hadoop')
+
 
 def install_tarball(env):
   import params
@@ -44,7 +68,10 @@ def install_tarball(env):
   hadoop_url = repo_base_url + config['configurations']['hadoop-download']['hadoop_url']
   stack_usr_bin = '/usr/bin'
 
-  Directory(params.hadoop_home, action="delete")
+  tarball_name = hadoop_url.split('/')[-1]
+  Execute('wget -O {0} {1}'.format('/tmp/' + tarball_name, hadoop_url))
+
+  re_install(env, '/tmp/' + tarball_name)
 
   Directory([params.hadoop_home, params.hdfs_log_dir_prefix, params.hadoop_pid_dir_prefix],
             mode=0755,
@@ -60,10 +87,6 @@ def install_tarball(env):
             group=params.user_group,
             create_parents=True
             )
-
-  tarball_name = hadoop_url.split('/')[-1]
-  Execute('wget -O {0} {1}'.format('/tmp/' + tarball_name, hadoop_url))
-  Execute('tar -zxvf {0} -C {1} --strip-components=1 && rm -f {0}'.format('/tmp/' + tarball_name, params.hadoop_home))
 
   Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home, params.stack_version_home+ '/hadoop-hdfs'))
   Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home, params.stack_version_home+ '/hadoop-yarn'))
