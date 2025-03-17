@@ -73,9 +73,6 @@ def install_tarball(env):
   exec_shell_template = '''
 #!/bin/bash
 
-# Autodetect JAVA_HOME if not defined
-. /usr/lib/bigtop-utils/bigtop-detect-javahome
-
 export HADOOP_LIBEXEC_DIR={0}
 
 exec {1} "$@"
