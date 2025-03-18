@@ -37,6 +37,9 @@ from resource_management.core.logger import Logger
 def calculate_folder_md5(path):
     import os
     import hashlib
+    if not os.path.exists(path):
+        return ""
+
     md5_hash = hashlib.md5()
     files = os.listdir(path)
     files.sort()
