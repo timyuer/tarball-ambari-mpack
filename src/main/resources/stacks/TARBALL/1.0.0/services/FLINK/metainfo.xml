@@ -95,6 +95,7 @@
       </components>
 
       <requiredServices>
+        <service>HDFS</service>
         <service>YARN</service>
       </requiredServices>
 

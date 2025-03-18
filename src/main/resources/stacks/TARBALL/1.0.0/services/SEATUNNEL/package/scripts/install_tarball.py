@@ -91,29 +91,7 @@ def install_tarball(env):
 
     re_install(seatunnel_url, 'seatunnel', params.seatunnel_home)
 
-    Directory(params.seatunnel_home,
-                mode=0755,
-                cd_access='a',
-                owner=params.seatunnel_user,
-                group=params.user_group,
-                create_parents=True
-                )
-    Directory(params.seatunnel_home + '/logs',
-                mode=0755,
-                cd_access='a',
-                owner=params.seatunnel_user,
-                group=params.user_group,
-                create_parents=True
-                )
-
-    Directory([params.seatunnel_connectors_dest, params.seatunnel_plugins_dir + "/jdbc/lib"],
-                mode=0755,
-                cd_access='a',
-                owner=params.seatunnel_user,
-                group=params.user_group,
-                create_parents=True
-                )
-    Directory('/etc/seatunnel',
+    Directory([params.seatunnel_home, '/etc/seatunnel'],
                 mode=0755,
                 cd_access='a',
                 owner=params.seatunnel_user,
@@ -122,8 +100,8 @@ def install_tarball(env):
                 )
 
     # wget plugins lib jars
-    Execute('wget -P {0} {1}'.format(params.seatunnel_plugins_dir + "/jdbc/lib", mysql_connector_url))
-    Execute('wget -P {0} {1}'.format(params.seatunnel_plugins_dir + "/jdbc/lib", sqlserver_connector_url))
+    Execute('wget -P {0} {1}'.format(params.seatunnel_lib_dir, mysql_connector_url))
+    Execute('wget -P {0} {1}'.format(params.seatunnel_lib_dir, sqlserver_connector_url))
     # wget lib jars
     Execute('wget -P {0} {1}'.format(params.seatunnel_lib_dir, seatunnel_hadoop3_url))
     Execute('ln -sf {0} {1}'.format(params.stack_root + '/current/hive-client/lib/hive-exec*.jar', params.seatunnel_lib_dir))

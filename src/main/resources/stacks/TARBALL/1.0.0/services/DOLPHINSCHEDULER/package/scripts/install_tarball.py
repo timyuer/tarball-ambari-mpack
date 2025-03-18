@@ -84,14 +84,7 @@ def install_tarball(env):
 
     re_install(dolphinscheduler_download_url, 'dolphinscheduler', params.dolphinscheduler_home)
 
-    Directory(params.dolphinscheduler_home,
-                mode=0755,
-                cd_access='a',
-                owner=params.dolphinscheduler_user,
-                group=params.user_group,
-                create_parents=True
-                )
-    Directory('/etc/dolphinscheduler',
+    Directory([params.dolphinscheduler_home, '/etc/dolphinscheduler'],
                 mode=0755,
                 cd_access='a',
                 owner=params.dolphinscheduler_user,

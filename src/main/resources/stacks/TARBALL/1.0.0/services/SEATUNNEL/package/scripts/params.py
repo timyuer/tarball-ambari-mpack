@@ -89,8 +89,8 @@ seatunnel_user_nofile_hard = default("/configurations/seatunnel-env/seatunnel_us
 
 
 # dependent service home
-flink_home = os.path.join(ext_home, "flink")
-spark_home = os.path.join(ext_home, "spark")
+flink_home = os.path.join(stack_version_home, "flink")
+spark_home = os.path.join(stack_version_home, "spark")
 
 hadoop_bin_dir = stack_select.get_hadoop_dir("bin")
 hadoop_conf_dir = conf_select.get_hadoop_conf_dir()

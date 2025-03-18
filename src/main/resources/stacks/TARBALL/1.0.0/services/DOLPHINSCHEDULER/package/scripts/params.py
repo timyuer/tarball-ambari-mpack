@@ -95,13 +95,13 @@ dolphinscheduler_env_content = config['configurations']['dolphinscheduler-env'][
 # sudoers.d
 sudoers_conf_dir = "/etc/sudoers.d"
 
-seatunnel_home = os.path.join(ext_home, "seatunnel")
-flink_home = os.path.join(ext_home, "flink")
+seatunnel_home = os.path.join(stack_version_home, "seatunnel")
+flink_home = os.path.join(stack_version_home, "flink")
 # default hadoop parameters
 hadoop_home = stack_select.get_hadoop_dir("home")
 hadoop_bin_dir = stack_select.get_hadoop_dir("bin")
 hadoop_conf_dir = conf_select.get_hadoop_conf_dir()
-dfs_type = default("/clusterLevelParams/dfs_type", "")
+dfs_type = default("/clusterLevelParams/dfs_type", "hdfs")
 hdfs_user = config['configurations']['hadoop-env']['hdfs_user']
 hdfs_principal_name = config['configurations']['hadoop-env']['hdfs_principal_name']
 hdfs_user_keytab = config['configurations']['hadoop-env']['hdfs_user_keytab']
