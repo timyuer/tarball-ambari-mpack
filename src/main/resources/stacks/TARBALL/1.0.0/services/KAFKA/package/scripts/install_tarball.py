@@ -33,41 +33,69 @@ import re
 
 from resource_management.core.logger import Logger
 
+def calculate_folder_md5(path):
+    import os
+    import hashlib
+    md5_hash = hashlib.md5()
+    files = os.listdir(path)
+    files.sort()
+    for filename in files:
+        md5_hash.update(filename.encode('utf-8'))
+    return md5_hash.hexdigest()
+
+def re_install(download_url, name, home_dir):
+    tmp_extract_dir = '/opt/' + name
+    tarball_path = '/opt/' + download_url.split('/')[-1]
+    Execute('wget -O {0} {1}'.format(tarball_path, download_url))
+
+    Execute('rm -rf {0} && mkdir -p {0}'.format(tmp_extract_dir))
+    Execute('tar -xf {0} -C {1} --strip-components=1'.format(tarball_path, tmp_extract_dir))
+
+    md5_flag  = calculate_folder_md5(tmp_extract_dir) == calculate_folder_md5(home_dir)
+    if not md5_flag:
+        Logger.info("md5 is not equal, will re-install tarball")
+        Directory(home_dir, action="delete")
+        Directory(home_dir,
+                    mode=0755,
+                    cd_access='a',
+                    create_parents=True
+                )
+        Execute('mv {0}/* {1}/'.format(tmp_extract_dir, home_dir))
+    else:
+        Logger.info("md5 is equal, will not re-install tarball")
+
+    Execute('rm -rf {0}'.format(tmp_extract_dir))
 
 def install_tarball(env):
-  import params
-  env.set_params(params)
-  from resource_management.libraries.script.script import Script
-  config = Script.get_config()
+    import params
+    env.set_params(params)
+    from resource_management.libraries.script.script import Script
+    config = Script.get_config()
 
-  # kafka download
-  repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
-  kafka_url = repo_base_url + config['configurations']['kafka-download']['kafka_url']
+    # kafka download
+    repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
+    kafka_url = repo_base_url + config['configurations']['kafka-download']['kafka_url']
 
-  Directory(params.kafka_home, action="delete")
+    re_install(kafka_url, 'kafka', params.kafka_home)
 
-  Directory([params.kafka_home, params.kafka_log_dir, params.kafka_pid_dir],
-            mode=0755,
-            cd_access='a',
-            owner=params.kafka_user,
-            group=params.user_group,
-            create_parents=True
-            )
-  Directory(['/etc/kafka', params.stack_root + '/current'],
-            mode=0755,
-            cd_access='a',
-            owner=params.kafka_user,
-            group=params.user_group,
-            create_parents=True
-            )
+    Directory([params.kafka_home, params.kafka_log_dir, params.kafka_pid_dir],
+                mode=0755,
+                cd_access='a',
+                owner=params.kafka_user,
+                group=params.user_group,
+                create_parents=True
+                )
+    Directory(['/etc/kafka', params.stack_root + '/current'],
+                mode=0755,
+                cd_access='a',
+                owner=params.kafka_user,
+                group=params.user_group,
+                create_parents=True
+                )
 
-  tarball_name = kafka_url.split('/')[-1]
-  Execute('wget -O {0} {1}'.format('/tmp/' + tarball_name, kafka_url))
-  Execute('tar -zxvf {0} -C {1} --strip-components=1 && rm -f {0}'
-          .format('/tmp/' + tarball_name, params.kafka_home))
-  # create link
-  Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.kafka_home + '/conf', params.conf_dir))
-  Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.kafka_home, params.stack_root + "/current/kafka-broker"))
-  # chown
-  Execute(
-    format('chown -R {params.kafka_user}:{params.user_group} {params.kafka_home}'))
+    # create link
+    Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.kafka_home + '/conf', params.conf_dir))
+    Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.kafka_home, params.stack_root + "/current/kafka-broker"))
+    # chown
+    Execute(
+        format('chown -R {params.kafka_user}:{params.user_group} {params.kafka_home}'))

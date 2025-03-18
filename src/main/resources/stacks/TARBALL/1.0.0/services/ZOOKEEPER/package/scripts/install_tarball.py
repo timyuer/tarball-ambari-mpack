@@ -34,41 +34,70 @@ import re
 from resource_management.core.logger import Logger
 
 
+def calculate_folder_md5(path):
+    import os
+    import hashlib
+    md5_hash = hashlib.md5()
+    files = os.listdir(path)
+    files.sort()
+    for filename in files:
+        md5_hash.update(filename.encode('utf-8'))
+    return md5_hash.hexdigest()
+
+def re_install(download_url, name, home_dir):
+    tmp_extract_dir = '/opt/' + name
+    tarball_path = '/opt/' + download_url.split('/')[-1]
+    Execute('wget -O {0} {1}'.format(tarball_path, download_url))
+
+    Execute('rm -rf {0} && mkdir -p {0}'.format(tmp_extract_dir))
+    Execute('tar -xf {0} -C {1} --strip-components=1'.format(tarball_path, tmp_extract_dir))
+
+    md5_flag  = calculate_folder_md5(tmp_extract_dir) == calculate_folder_md5(home_dir)
+    if not md5_flag:
+        Logger.info("md5 is not equal, will re-install tarball")
+        Directory(home_dir, action="delete")
+        Directory(home_dir,
+                    mode=0755,
+                    cd_access='a',
+                    create_parents=True
+                )
+        Execute('mv {0}/* {1}/'.format(tmp_extract_dir, home_dir))
+    else:
+        Logger.info("md5 is equal, will not re-install tarball")
+
+    Execute('rm -rf {0}'.format(tmp_extract_dir))
+
 def install_tarball(env):
-  import params
-  env.set_params(params)
-  from resource_management.libraries.script.script import Script
-  config = Script.get_config()
+    import params
+    env.set_params(params)
+    from resource_management.libraries.script.script import Script
+    config = Script.get_config()
 
-  # zookeeper download
-  repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
-  zookeeper_url = repo_base_url + config['configurations']['zookeeper-download']['zookeeper_url']
+    # zookeeper download
+    repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
+    zookeeper_url = repo_base_url + config['configurations']['zookeeper-download']['zookeeper_url']
 
-  Directory(params.zookeeper_home, action="delete")
+    re_install(zookeeper_url, 'zookeeper', params.zookeeper_home)
 
-  Directory([params.zookeeper_home, params.zk_log_dir, params.zk_pid_dir],
-            mode=0755,
-            cd_access='a',
-            owner=params.zk_user,
-            group=params.user_group,
-            create_parents=True
-            )
-  Directory(['/etc/zookeeper', params.stack_root + '/current'],
-            mode=0755,
-            cd_access='a',
-            owner=params.zk_user,
-            group=params.user_group,
-            create_parents=True
-            )
+    Directory([params.zookeeper_home, params.zk_log_dir, params.zk_pid_dir],
+                mode=0755,
+                cd_access='a',
+                owner=params.zk_user,
+                group=params.user_group,
+                create_parents=True
+                )
+    Directory(['/etc/zookeeper', params.stack_root + '/current'],
+                mode=0755,
+                cd_access='a',
+                owner=params.zk_user,
+                group=params.user_group,
+                create_parents=True
+                )
 
-  tarball_name = zookeeper_url.split('/')[-1]
-  Execute('wget -O {0} {1}'.format('/tmp/' + tarball_name, zookeeper_url))
-  Execute('tar -zxvf {0} -C {1} --strip-components=1 && rm -f {0}'
-          .format('/tmp/' + tarball_name, params.zookeeper_home))
-  # create link
-  Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.zookeeper_home + '/conf', params.conf_dir))
-  Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.zookeeper_home, params.stack_root + "/current/zookeeper-server"))
-  Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.zookeeper_home, params.stack_root + "/current/zookeeper-client"))
-  # chown
-  Execute(
-    format('chown -R {params.zk_user}:{params.user_group} {params.zookeeper_home}'))
+    # create link
+    Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.zookeeper_home + '/conf', params.conf_dir))
+    Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.zookeeper_home, params.stack_root + "/current/zookeeper-server"))
+    Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.zookeeper_home, params.stack_root + "/current/zookeeper-client"))
+    # chown
+    Execute(
+        format('chown -R {params.zk_user}:{params.user_group} {params.zookeeper_home}'))

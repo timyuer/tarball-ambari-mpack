@@ -34,100 +34,104 @@ import re
 from resource_management.core.logger import Logger
 
 def calculate_folder_md5(path):
-  import os
-  import hashlib
-  md5_hash = hashlib.md5()
-  files = os.listdir(path)
-  files.sort()
-  for filename in files:
-    md5_hash.update(filename.encode('utf-8'))
-  return md5_hash.hexdigest()
+    import os
+    import hashlib
+    md5_hash = hashlib.md5()
+    files = os.listdir(path)
+    files.sort()
+    for filename in files:
+        md5_hash.update(filename.encode('utf-8'))
+    return md5_hash.hexdigest()
 
-def re_install(env, hadoop_url):
-  import params
-  env.set_params(params)
+def re_install(download_url, name, home_dir):
+    tmp_extract_dir = '/opt/' + name
+    tarball_path = '/opt/' + download_url.split('/')[-1]
+    Execute('wget -O {0} {1}'.format(tarball_path, download_url))
 
-  tarball_name = hadoop_url.split('/')[-1]
-  Execute('wget -O {0} {1}'.format('/tmp/' + tarball_name, hadoop_url))
-  tarball_path = '/tmp/' + tarball_name
+    Execute('rm -rf {0} && mkdir -p {0}'.format(tmp_extract_dir))
+    Execute('tar -xf {0} -C {1} --strip-components=1'.format(tarball_path, tmp_extract_dir))
 
-  Execute('rm -rf /opt/hadoop && mkdir -p /opt/hadoop')
-  Execute('tar -zxvf {0} -C {1} --strip-components=1'.format(tarball_path, "/opt/hadoop"))
-  md5_flag  = calculate_folder_md5("/opt/hadoop") == calculate_folder_md5(params.hadoop_home)
-  if not md5_flag:
-    Logger.info("md5 is not equal, will re-install tarball")
-    Directory(params.hadoop_home, action="delete")
-    Execute('tar -zxf {0} -C {1} --strip-components=1 && rm -f {0}'.format(tarball_path, params.hadoop_home))
-  else:
-    Logger.info("md5 is equal, will not re-install tarball")
-  Execute('rm -rf /opt/hadoop')
+    md5_flag  = calculate_folder_md5(tmp_extract_dir) == calculate_folder_md5(home_dir)
+    if not md5_flag:
+        Logger.info("md5 is not equal, will re-install tarball")
+        Directory(home_dir, action="delete")
+        Directory(home_dir,
+                    mode=0755,
+                    cd_access='a',
+                    create_parents=True
+                )
+        Execute('mv {0}/* {1}/'.format(tmp_extract_dir, home_dir))
+    else:
+        Logger.info("md5 is equal, will not re-install tarball")
+
+    Execute('rm -rf {0}'.format(tmp_extract_dir))
 
 
 def install_tarball(env):
-  import params
-  env.set_params(params)
-  from resource_management.libraries.script.script import Script
-  config = Script.get_config()
-  # tarball download
-  repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
-  hadoop_url = repo_base_url + config['configurations']['hadoop-download']['hadoop_url']
-  stack_usr_bin = '/usr/bin'
+    import params
+    env.set_params(params)
+    from resource_management.libraries.script.script import Script
+    config = Script.get_config()
+    # tarball download
+    repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
+    hadoop_url = repo_base_url + config['configurations']['hadoop-download']['hadoop_url']
+    stack_usr_bin = '/usr/bin'
 
-  re_install(env, hadoop_url)
+    re_install(hadoop_url, 'hadoop', params.hadoop_home)
 
-  Directory([params.hadoop_home, params.hdfs_log_dir_prefix, params.hadoop_pid_dir_prefix],
-            mode=0755,
-            cd_access='a',
-            owner=params.hdfs_user,
-            group=params.user_group,
-            create_parents=True
-            )
-  Directory(['/etc/hadoop', params.stack_root + '/current'],
-            mode=0755,
-            cd_access='a',
-            owner=params.hdfs_user,
-            group=params.user_group,
-            create_parents=True
-            )
+    Directory([params.hadoop_home, params.hdfs_log_dir_prefix, params.hadoop_pid_dir_prefix],
+                mode=0755,
+                cd_access='a',
+                owner=params.hdfs_user,
+                group=params.user_group,
+                create_parents=True
+                )
+    Directory(['/etc/hadoop', params.stack_root + '/current'],
+                mode=0755,
+                cd_access='a',
+                owner=params.hdfs_user,
+                group=params.user_group,
+                create_parents=True
+                )
 
-  Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home, params.stack_version_home+ '/hadoop-hdfs'))
-  Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home, params.stack_version_home+ '/hadoop-yarn'))
-  Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home, params.stack_version_home+ '/hadoop-mapreduce'))
-  # create link
-  Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home + '/etc/hadoop', '/etc/hadoop/conf'))
-  exec_shell_template = '''
-#!/bin/bash
+    Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home, params.stack_version_home+ '/hadoop-hdfs'))
+    Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home, params.stack_version_home+ '/hadoop-yarn'))
+    Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home, params.stack_version_home+ '/hadoop-mapreduce'))
+    # create link
+    Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home + '/etc/hadoop', '/etc/hadoop/conf'))
+    exec_shell_template = '''
+    #!/bin/bash
 
-export HADOOP_LIBEXEC_DIR={0}
+    export HADOOP_LIBEXEC_DIR={0}
 
-exec {1} "$@"
-  '''
+    exec {1} "$@"
+    '''
 
-  File(stack_usr_bin + '/hadoop',
-       owner=params.hdfs_user,
-       group=params.user_group,
-       mode=0755,
-       content=exec_shell_template.format(params.hadoop_libexec_dir, params.hadoop_home + '/bin/hadoop'))
-  File(stack_usr_bin + '/hdfs',
-       owner=params.hdfs_user,
-       group=params.user_group,
-       mode=0755,
-       content=exec_shell_template.format(params.hadoop_libexec_dir, params.hadoop_home + '/bin/hdfs'))
-  File(stack_usr_bin + '/yarn',
-       owner=params.hdfs_user,
-       group=params.user_group,
-       mode=0755,
-       content=exec_shell_template.format(params.hadoop_libexec_dir, params.hadoop_home + '/bin/yarn'))
-  File(stack_usr_bin + '/mapred',
-       owner=params.hdfs_user,
-       group=params.user_group,
-       mode=0755,
-       content=exec_shell_template.format(params.hadoop_libexec_dir, params.hadoop_home + '/bin/mapred'))
+    File(stack_usr_bin + '/hadoop',
+        owner=params.hdfs_user,
+        group=params.user_group,
+        mode=0755,
+        content=exec_shell_template.format(params.hadoop_libexec_dir, params.hadoop_home + '/bin/hadoop'))
+    File(stack_usr_bin + '/hdfs',
+        owner=params.hdfs_user,
+        group=params.user_group,
+        mode=0755,
+        content=exec_shell_template.format(params.hadoop_libexec_dir, params.hadoop_home + '/bin/hdfs'))
+    File(stack_usr_bin + '/yarn',
+        owner=params.hdfs_user,
+        group=params.user_group,
+        mode=0755,
+        content=exec_shell_template.format(params.hadoop_libexec_dir, params.hadoop_home + '/bin/yarn'))
+    File(stack_usr_bin + '/mapred',
+        owner=params.hdfs_user,
+        group=params.user_group,
+        mode=0755,
+        content=exec_shell_template.format(params.hadoop_libexec_dir, params.hadoop_home + '/bin/mapred'))
 
-  Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home, params.stack_root + "/current/hadoop-client"))
-  Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home, params.stack_root + "/current/hadoop-hdfs-client"))
-  Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home, params.stack_root + "/current/hadoop-yarn-client"))
-  Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home, params.stack_root + "/current/hadoop-mapreduce-client"))
+    Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home, params.stack_root + "/current/hadoop-client"))
+    Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home, params.stack_root + "/current/hadoop-hdfs-client"))
+    Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home, params.stack_root + "/current/hadoop-yarn-client"))
+    Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.hadoop_home, params.stack_root + "/current/hadoop-mapreduce-client"))
 
-  # chown
-  Execute(format('chown -R {hdfs_user}:{user_group} {hadoop_home}'))
+    # chown
+    Execute(format('chown -R {hdfs_user}:{user_group} {hadoop_home}'))

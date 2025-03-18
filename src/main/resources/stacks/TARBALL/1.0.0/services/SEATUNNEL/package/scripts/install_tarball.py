@@ -33,80 +33,107 @@ import re
 
 from resource_management.core.logger import Logger
 
+def calculate_folder_md5(path):
+    import os
+    import hashlib
+    md5_hash = hashlib.md5()
+    files = os.listdir(path)
+    files.sort()
+    for filename in files:
+        md5_hash.update(filename.encode('utf-8'))
+    return md5_hash.hexdigest()
+
+def re_install(download_url, name, home_dir):
+    tmp_extract_dir = '/opt/' + name
+    tarball_path = '/opt/' + download_url.split('/')[-1]
+    Execute('wget -O {0} {1}'.format(tarball_path, download_url))
+
+    Execute('rm -rf {0} && mkdir -p {0}'.format(tmp_extract_dir))
+    Execute('tar -xf {0} -C {1} --strip-components=1'.format(tarball_path, tmp_extract_dir))
+
+    md5_flag  = calculate_folder_md5(tmp_extract_dir) == calculate_folder_md5(home_dir)
+    if not md5_flag:
+        Logger.info("md5 is not equal, will re-install tarball")
+        Directory(home_dir, action="delete")
+        Directory(home_dir,
+                    mode=0755,
+                    cd_access='a',
+                    create_parents=True
+                )
+        Execute('mv {0}/* {1}/'.format(tmp_extract_dir, home_dir))
+    else:
+        Logger.info("md5 is equal, will not re-install tarball")
+
+    Execute('rm -rf {0}'.format(tmp_extract_dir))
 
 def install_tarball(env):
-  import params
-  env.set_params(params)
-  from resource_management.libraries.script.script import Script
-  config = Script.get_config()
-  repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
+    import params
+    env.set_params(params)
+    from resource_management.libraries.script.script import Script
+    config = Script.get_config()
+    repo_base_url = config["repositoryFile"]["repositories"][0]["baseUrl"]
 
-  # tarball download
-  seatunnel_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_url']
-  seatunnel_hadoop3_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_hadoop3_url']
-  seatunnel_connector_hive_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_hive_url']
-  seatunnel_connector_jdbc_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_jdbc_url']
-  seatunnel_connector_doris_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_doris_url']
-  seatunnel_connector_cdcmysql_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_cdcmysql_url']
-  seatunnel_connector_kafka_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_kafka_url']
-  seatunnel_connector_es_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_es_url']
-  seatunnel_connector_cdcsqlserver_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_cdcsqlserver_url']
-  mysql_connector_url = repo_base_url + config['configurations']['seatunnel-download']['mysql_connector_url']
-  sqlserver_connector_url = repo_base_url + config['configurations']['seatunnel-download']['sqlserver_connector_url']
+    # tarball download
+    seatunnel_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_url']
+    seatunnel_hadoop3_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_hadoop3_url']
+    seatunnel_connector_hive_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_hive_url']
+    seatunnel_connector_jdbc_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_jdbc_url']
+    seatunnel_connector_doris_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_doris_url']
+    seatunnel_connector_cdcmysql_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_cdcmysql_url']
+    seatunnel_connector_kafka_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_kafka_url']
+    seatunnel_connector_es_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_es_url']
+    seatunnel_connector_cdcsqlserver_url = repo_base_url + config['configurations']['seatunnel-download']['seatunnel_connector_cdcsqlserver_url']
+    mysql_connector_url = repo_base_url + config['configurations']['seatunnel-download']['mysql_connector_url']
+    sqlserver_connector_url = repo_base_url + config['configurations']['seatunnel-download']['sqlserver_connector_url']
 
-  Directory(params.seatunnel_home, action="delete")
+    re_install(seatunnel_url, 'seatunnel', params.seatunnel_home)
 
-  Directory(params.seatunnel_home,
-            mode=0755,
-            cd_access='a',
-            owner=params.seatunnel_user,
-            group=params.user_group,
-            create_parents=True
-            )
-  Directory(params.seatunnel_home + '/logs',
-            mode=0755,
-            cd_access='a',
-            owner=params.seatunnel_user,
-            group=params.user_group,
-            create_parents=True
-            )
+    Directory(params.seatunnel_home,
+                mode=0755,
+                cd_access='a',
+                owner=params.seatunnel_user,
+                group=params.user_group,
+                create_parents=True
+                )
+    Directory(params.seatunnel_home + '/logs',
+                mode=0755,
+                cd_access='a',
+                owner=params.seatunnel_user,
+                group=params.user_group,
+                create_parents=True
+                )
 
-  Directory([params.seatunnel_connectors_dest, params.seatunnel_plugins_dir + "/jdbc/lib"],
-            mode=0755,
-            cd_access='a',
-            owner=params.seatunnel_user,
-            group=params.user_group,
-            create_parents=True
-            )
-  Directory('/etc/seatunnel',
-            mode=0755,
-            cd_access='a',
-            owner=params.seatunnel_user,
-            group=params.user_group,
-            create_parents=True
-            )
+    Directory([params.seatunnel_connectors_dest, params.seatunnel_plugins_dir + "/jdbc/lib"],
+                mode=0755,
+                cd_access='a',
+                owner=params.seatunnel_user,
+                group=params.user_group,
+                create_parents=True
+                )
+    Directory('/etc/seatunnel',
+                mode=0755,
+                cd_access='a',
+                owner=params.seatunnel_user,
+                group=params.user_group,
+                create_parents=True
+                )
 
-  tarball_name = seatunnel_url.split('/')[-1]
-  tmp_seatunnel_tgz_path = os.path.join('/tmp/', tarball_name)
-  Execute('wget -O {0} {1}'.format(tmp_seatunnel_tgz_path, seatunnel_url))
-  Execute(
-    'tar -zxf {0} -C {1} --strip-components=1 && rm -f {0}'.format(tmp_seatunnel_tgz_path, params.seatunnel_home))
-  # wget plugins lib jars
-  Execute('wget -P {0} {1}'.format(params.seatunnel_plugins_dir + "/jdbc/lib", mysql_connector_url))
-  Execute('wget -P {0} {1}'.format(params.seatunnel_plugins_dir + "/jdbc/lib", sqlserver_connector_url))
-  # wget lib jars
-  Execute('wget -P {0} {1}'.format(params.seatunnel_lib_dir, seatunnel_hadoop3_url))
-  Execute('ln -sf {0} {1}'.format(params.stack_root + '/current/hive-client/lib/hive-exec*.jar', params.seatunnel_lib_dir))
-  # wget connectors
-  Execute('wget -P {0} {1}'.format(params.seatunnel_connectors_dir, seatunnel_connector_hive_url))
-  Execute('wget -P {0} {1}'.format(params.seatunnel_connectors_dir, seatunnel_connector_jdbc_url))
-  Execute('wget -P {0} {1}'.format(params.seatunnel_connectors_dir, seatunnel_connector_doris_url))
-  Execute('wget -P {0} {1}'.format(params.seatunnel_connectors_dir, seatunnel_connector_cdcmysql_url))
-  Execute('wget -P {0} {1}'.format(params.seatunnel_connectors_dir, seatunnel_connector_kafka_url))
-  Execute('wget -P {0} {1}'.format(params.seatunnel_connectors_dir, seatunnel_connector_es_url))
-  Execute('wget -P {0} {1}'.format(params.seatunnel_connectors_dir, seatunnel_connector_cdcsqlserver_url))
-  # create links
-  Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.seatunnel_home_conf_dir, params.seatunnel_conf_dir))
-  Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.seatunnel_home, params.stack_root + "/current/seatunnel"))
-  # chown
-  Execute('chown -R {0}:{1} {2}'.format(params.seatunnel_user, params.user_group, params.seatunnel_home))
+    # wget plugins lib jars
+    Execute('wget -P {0} {1}'.format(params.seatunnel_plugins_dir + "/jdbc/lib", mysql_connector_url))
+    Execute('wget -P {0} {1}'.format(params.seatunnel_plugins_dir + "/jdbc/lib", sqlserver_connector_url))
+    # wget lib jars
+    Execute('wget -P {0} {1}'.format(params.seatunnel_lib_dir, seatunnel_hadoop3_url))
+    Execute('ln -sf {0} {1}'.format(params.stack_root + '/current/hive-client/lib/hive-exec*.jar', params.seatunnel_lib_dir))
+    # wget connectors
+    Execute('wget -P {0} {1}'.format(params.seatunnel_connectors_dir, seatunnel_connector_hive_url))
+    Execute('wget -P {0} {1}'.format(params.seatunnel_connectors_dir, seatunnel_connector_jdbc_url))
+    Execute('wget -P {0} {1}'.format(params.seatunnel_connectors_dir, seatunnel_connector_doris_url))
+    Execute('wget -P {0} {1}'.format(params.seatunnel_connectors_dir, seatunnel_connector_cdcmysql_url))
+    Execute('wget -P {0} {1}'.format(params.seatunnel_connectors_dir, seatunnel_connector_kafka_url))
+    Execute('wget -P {0} {1}'.format(params.seatunnel_connectors_dir, seatunnel_connector_es_url))
+    Execute('wget -P {0} {1}'.format(params.seatunnel_connectors_dir, seatunnel_connector_cdcsqlserver_url))
+    # create links
+    Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.seatunnel_home_conf_dir, params.seatunnel_conf_dir))
+    Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.seatunnel_home, params.stack_root + "/current/seatunnel"))
+    # chown
+    Execute('chown -R {0}:{1} {2}'.format(params.seatunnel_user, params.user_group, params.seatunnel_home))

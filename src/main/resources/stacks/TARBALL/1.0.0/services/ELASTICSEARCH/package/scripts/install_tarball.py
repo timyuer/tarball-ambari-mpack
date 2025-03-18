@@ -34,6 +34,40 @@ import re
 from resource_management.core.logger import Logger
 
 
+def calculate_folder_md5(path):
+    import os
+    import hashlib
+    md5_hash = hashlib.md5()
+    files = os.listdir(path)
+    files.sort()
+    for filename in files:
+        md5_hash.update(filename.encode('utf-8'))
+    return md5_hash.hexdigest()
+
+def re_install(download_url, name, home_dir):
+    tmp_extract_dir = '/opt/' + name
+    tarball_path = '/opt/' + download_url.split('/')[-1]
+    Execute('wget -O {0} {1}'.format(tarball_path, download_url))
+
+    Execute('rm -rf {0} && mkdir -p {0}'.format(tmp_extract_dir))
+    Execute('tar -xf {0} -C {1} --strip-components=1'.format(tarball_path, tmp_extract_dir))
+
+    md5_flag  = calculate_folder_md5(tmp_extract_dir) == calculate_folder_md5(home_dir)
+    if not md5_flag:
+        Logger.info("md5 is not equal, will re-install tarball")
+        Directory(home_dir, action="delete")
+        Directory(home_dir,
+                    mode=0755,
+                    cd_access='a',
+                    create_parents=True
+                )
+        Execute('mv {0}/* {1}/'.format(tmp_extract_dir, home_dir))
+    else:
+        Logger.info("md5 is equal, will not re-install tarball")
+
+    Execute('rm -rf {0}'.format(tmp_extract_dir))
+
+
 def install_tarball(env, name='elasticsearch'):
   import params
   env.set_params(params)
@@ -45,7 +79,7 @@ def install_tarball(env, name='elasticsearch'):
     # tarball download
     elasticsearch_url = repo_base_url + config['configurations']['elasticsearch-download']['elasticsearch_url']
     
-    Directory(params.elastic_home, action="delete")
+    re_install(elasticsearch_url, name, params.elastic_home)
 
     Directory('/etc/elasticsearch',
                 mode=0755,
@@ -55,19 +89,6 @@ def install_tarball(env, name='elasticsearch'):
                 create_parents=True
                 )
 
-    tmp_es_tar_path = '/tmp/elasticsearch.tar.gz'
-    # Download elasticsearch.tar.gz
-    Execute(
-        'wget {0} -O {1}'.format(elasticsearch_url, tmp_es_tar_path))
-
-    # Install Elasticsearch
-    Execute('/bin/rm -rf {0}'.format(params.elastic_home))
-    Execute('mkdir -p {0}'.format(params.elastic_home))
-    Execute('tar -zxvf {0} -C {1} --strip-components=1 && rm -rf {2}'
-              .format(tmp_es_tar_path, params.elastic_home, tmp_es_tar_path))
-
-    # Remove Elasticsearch installation file
-    Execute('rm -rf {0}'.format(tmp_es_tar_path))
     # create link
     Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.elastic_home_conf_dir, params.elastic_conf_dir))
     Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.elastic_home, params.stack_root + "/current/elasticsearch"))
@@ -76,7 +97,7 @@ def install_tarball(env, name='elasticsearch'):
   elif name == 'kibana':
     kibana_url = repo_base_url + config['configurations']['elasticsearch-download']['kibana_url']
 
-    Directory(params.elastic_kibana_home, action="delete")
+    re_install(kibana_url, name, params.elastic_kibana_home)
 
     # Create directories
     Directory([params.elastic_kibana_home, params.kibana_logging_dest_dir, params.elastic_kibana_pid_dir],
@@ -86,18 +107,5 @@ def install_tarball(env, name='elasticsearch'):
               group=params.user_group,
               create_parents=True
               )
-
-    # Download Kibana
-    tmp_kibana_tar_path = '/tmp/kibana.tar.gz'
-    Execute(format("wget {kibana_url} -O {tmp_kibana_tar_path}"))
-
-    # Install Kibana
-    Execute(format("tar -zxf {tmp_kibana_tar_path} -C {elastic_kibana_home} --strip-components=1"))
-
-    # Ensure all files owned by Kibana user
-    Execute(format("chown -R {elastic_user}:{user_group} {elastic_kibana_home}"))
-
-    # Remove Kibana installation file
-    Execute(format("rm -rf {tmp_kibana_tar_path}"))
 
     Execute('echo "Kibana install complete"')

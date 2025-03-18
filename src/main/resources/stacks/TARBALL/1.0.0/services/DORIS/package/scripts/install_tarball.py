@@ -33,6 +33,53 @@ import re
 
 from resource_management.core.logger import Logger
 
+def calculate_folder_md5(path):
+    import os
+    import hashlib
+    md5_hash = hashlib.md5()
+    files = os.listdir(path)
+    files.sort()
+    for filename in files:
+        md5_hash.update(filename.encode('utf-8'))
+    return md5_hash.hexdigest()
+
+def re_install(download_url, name, home_dir):
+    tmp_extract_dir = '/opt/' + name
+    tarball_path = '/opt/' + download_url.split('/')[-1]
+    Execute('wget -O {0} {1}'.format(tarball_path, download_url))
+
+    Execute('rm -rf {0} && mkdir -p {0}'.format(tmp_extract_dir))
+    Execute('tar -xf {0} -C {1} --strip-components=1'.format(tarball_path, tmp_extract_dir))
+
+    if name == 'fe':
+        md5_flag  = calculate_folder_md5(tmp_extract_dir + '/fe') == calculate_folder_md5(home_dir)
+        if not md5_flag:
+            Logger.info("md5 is not equal, will re-install tarball")
+            Directory(home_dir, action="delete")
+            Directory(home_dir,
+                        mode=0755,
+                        cd_access='a',
+                        create_parents=True
+                    )
+            Execute('mv {0}/fe/* {1}/'.format(tmp_extract_dir, home_dir))
+        else:
+            Logger.info("md5 is equal, will not re-install tarball")
+    elif name == 'be':
+        md5_flag  = calculate_folder_md5(tmp_extract_dir + '/be') == calculate_folder_md5(home_dir)
+        if not md5_flag:
+            Logger.info("md5 is not equal, will re-install tarball")
+            Directory(home_dir, action="delete")
+            Directory(home_dir,
+                        mode=0755,
+                        cd_access='a',
+                        create_parents=True
+                    )
+            Execute('mv {0}/be/* {1}/'.format(tmp_extract_dir, home_dir))
+        else:
+            Logger.info("md5 is equal, will not re-install tarball")
+
+    Execute('rm -rf {0}'.format(tmp_extract_dir))
+
 
 def install_tarball(env, name):
   import params
@@ -53,7 +100,7 @@ def install_tarball(env, name):
             )
   
   if name == 'fe':
-    Directory(params.fe_home, action="delete")
+    re_install(doris_download_url, 'fe', params.fe_home)
 
     Directory([params.fe_home, '/etc/doris-fe'],
               mode=0755,
@@ -63,9 +110,6 @@ def install_tarball(env, name):
               create_parents=True
               )
 
-    Execute('wget -O /opt/doris.tar.gz {0}'.format(doris_download_url))
-    Execute('mkdir -p {1} && tar -xvf {0} -C {1} --strip-components=1'.format('/opt/doris.tar.gz', '/opt/doris'))
-    Execute('rm -rf {0} && mv /opt/doris/fe {0}'.format(params.fe_home))
     # create link
     Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.fe_home_conf_dir, params.fe_conf_dir))
     Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.fe_home, params.stack_root + "/current/doris-fe"))
@@ -79,7 +123,7 @@ def install_tarball(env, name):
     Logger.info('Install the doris-fe Success')
 
   elif name == 'be':
-    Directory([params.be_home], action="delete")
+    re_install(doris_download_url, 'be', params.be_home)
 
     Directory([params.be_home, '/etc/doris-be'],
               mode=0755,
@@ -89,9 +133,6 @@ def install_tarball(env, name):
               create_parents=True
               )
     
-    Execute('wget -O /opt/doris.tar.gz {0}'.format(doris_download_url))
-    Execute('mkdir -p {1} && tar -xvf {0} -C {1} --strip-components=1'.format('/opt/doris.tar.gz', '/opt/doris'))
-    Execute('rm -rf {0} && mv /opt/doris/be {0}'.format(params.be_home))
     # create link
     Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.be_home_conf_dir, params.be_conf_dir))
     Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.be_home, params.stack_root + "/current/doris-be"))
