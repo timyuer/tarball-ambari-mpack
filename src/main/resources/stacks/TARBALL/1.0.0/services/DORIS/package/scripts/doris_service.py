@@ -55,7 +55,16 @@ def doris_service(name, upgrade_type=None, action=None):
         try:
             # register follower before start fe
             fe_maser_host, fe_list = get_fe_list()
-            if params.hostname in fe_list:
+            if params.hostname == fe_maser_host:
+                Logger.info("This host is the master, no need to register follower")
+                # start fe
+                Execute(
+                    format("{fe_bin_dir}/start_fe.sh --daemon"),
+                    user=params.doris_user,
+                    not_if=fe_no_op_test,
+                    environment={"JAVA_HOME": params.java_home},
+                )
+            elif params.hostname in fe_list:
                 Logger.info("This host is already in the FRONTENDS list")
                 # start fe
                 Execute(
@@ -145,39 +154,52 @@ def doris_service(name, upgrade_type=None, action=None):
 def register_be():
     import params
     from doris_tool import DorisTool
-    try:
-        # init DorisTool
-        db = DorisTool(
-            host=format("{fe_host}"),
-            user="root",
-            password="",
-            port = int(format("{query_port}")),
-            database="mysql"
-        )
-        # connect to database
-        db.connect()
 
+    fe_master_host = get_alive_fe()
+    if fe_master_host is None:
+        Logger.error("No alive FE found")
+        return be_list
+
+    try:
+        db = None
         be_list = get_be_list()
         if params.hostname in be_list:
             Logger.info("This host is already in the backend list")
         else:
             Logger.info("This host is not in the backend list, add it")
+            # init DorisTool
+            db = DorisTool(
+                host=fe_master_host,
+                user="root",
+                password="",
+                port = int(format("{query_port}")),
+                database="mysql"
+            )
+            # connect to database
+            db.connect()
             sql = format("ALTER SYSTEM ADD BACKEND '{hostname}:{heartbeat_service_port}'")
             Logger.info("add_be: " + sql)
             db.execute_update(sql)
     finally:
         # close database connection
-        db.close()
+        if db is not None:
+            db.close()
 
 def get_be_list():
     import params
     import json
     from doris_tool import DorisTool
     be_list = []
+
+    fe_master_host = get_alive_fe()
+    if fe_master_host is None:
+        Logger.error("No alive FE found")
+        return be_list
+
     try:
         # init DorisTool
         db = DorisTool(
-            host=format("{fe_host}"),
+            host=fe_master_host,
             user="root",
             password="",
             port = int(format("{query_port}")),
@@ -206,16 +228,34 @@ def get_fe_master():
     fe_maser_host, fe_list = get_fe_list()
     return fe_maser_host
 
+def get_alive_fe():
+    import params
+    fe_host = params.fe_host
+    if len(params.fe_hosts) > 1:
+        for host in params.fe_hosts:
+            cmd = format(
+            "curl -s -o /dev/null -w'%{{http_code}}' http://{host}:{http_port}/api/bootstrap")
+            returncode, stdout = call(cmd, user=params.doris_user, timeout=3000)
+            if returncode == 0 and stdout == "200":
+                fe_host = host
+                break
+    return fe_host
+
 def get_fe_list():
     import params
     import json
     from doris_tool import DorisTool
     fe_list = []
-    fe_master_host = params.fe_host
+    
+    fe_master_host = get_alive_fe()
+    if fe_master_host is None:
+        Logger.error("No alive FE found")
+        return (fe_master_host, fe_list)
+
     try:
         # init DorisTool
         db = DorisTool(
-            host=format("{fe_host}"),
+            host=fe_master_host,
             user="root",
             password="",
             port = int(format("{query_port}")),
@@ -237,7 +277,7 @@ def get_fe_list():
                 fe_master_host = json_dict['Host']
     except:
         Logger.error("Connect {0} Failed !!!".format(params.fe_host))
-        raise
+        pass
     finally:
         # close database connection
         db.close()
@@ -249,20 +289,10 @@ def register_follower():
     import params
     from doris_tool import DorisTool
     try:
-        # init DorisTool
-        db = DorisTool(
-            host=format("{fe_host}"),
-            user="root",
-            password="",
-            port = int(format("{query_port}")),
-            database="mysql"
-        )
-        # connect to database
-        db.connect()
-
+        db = None
         fe_maser_host, fe_list = get_fe_list()
-        if params.hostname == fe_maser_host:
-            Logger.info("This host is the master, no need to register follower")
+        if len(fe_list) == 0:
+            Logger.error("No alive FE found")
             return
 
         if params.hostname in fe_list:
@@ -270,9 +300,24 @@ def register_follower():
         else:
             Logger.info("This host is not in the FRONTENDS list, add it")
 
+            # init DorisTool
+            db = DorisTool(
+                host=fe_maser_host,
+                user="root",
+                password="",
+                port = int(format("{query_port}")),
+                database="mysql"
+            )
+            # connect to database
+            db.connect()
+
             sql = format("ALTER SYSTEM ADD FOLLOWER '{hostname}:{edit_log_port}'")
             Logger.info("register_follower: " + sql)
             db.execute_update(sql)
+    except:
+        Logger.error("Connect {0} Failed !!!".format(params.fe_host))
+        pass
     finally:
         # close database connection
-        db.close()
+        if db is not None:
+            db.close()

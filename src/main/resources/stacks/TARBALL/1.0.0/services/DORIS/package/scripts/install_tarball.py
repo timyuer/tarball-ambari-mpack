@@ -81,7 +81,7 @@ def re_install(download_url, name, home_dir):
         else:
             Logger.info("md5 is equal, will not re-install tarball")
 
-    Execute('rm -rf {0}'.format(tmp_extract_dir))
+    Execute('rm -rf {0} && rm -rf {1}'.format(tmp_extract_dir, tarball_path))
 
 
 def install_tarball(env, name):
@@ -121,8 +121,6 @@ def install_tarball(env, name):
     # chown
     Execute(
       format('chown -R {params.doris_user}:{params.user_group} {params.fe_home}'))
-    # delete
-    Execute('rm -rf /opt/doris /opt/doris.tar.gz')
     Logger.info('Install the doris-fe Success')
 
   elif name == 'be':
@@ -142,7 +140,4 @@ def install_tarball(env, name):
     Execute('rm -rf {1} && ln -sf {0} {1}'.format(params.doris_be_log_dir, params.be_home + "/log"))
     # chown
     Execute(format('chown -R {params.doris_user}:{params.user_group} {params.be_home}'))
-    
-    # delete
-    Execute('rm -rf /opt/doris /opt/doris.tar.gz')
     Logger.info('Install the doris-be Success')
