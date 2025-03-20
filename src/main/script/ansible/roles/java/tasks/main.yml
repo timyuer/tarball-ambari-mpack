@@ -1,2 +1,4 @@
-- name: 安装java和maven
+- name: 安装java8
   include_tasks: java.yml
+- name: 安装java17
+  include_tasks: java17.yml

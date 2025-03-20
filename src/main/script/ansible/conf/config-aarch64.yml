@@ -6,9 +6,12 @@ ambari_url: "http://repo.jndv.org/bdp/aarch64/2.7.8.0-211/"
 
 timeserver: bdp01
 
+java_home: /usr/local/java
 java_url: "http://repo.jndv.org/bdp/aarch64/base/zulu8.84.0.15-ca-jdk8.0.442-linux_aarch64.tar.gz"
 java_tarball_dest: /opt/
-java_home: /usr/local/java
+
+java17_url: "http://repo.jndv.org/bdp/aarch64/base/zulu17.56.15-ca-jdk17.0.14-linux_aarch64.tar.gz"
+java17_home: /usr/local/java17
 
 mysql_driver_url: "http://repo.jndv.org/bdp/aarch64/base/mysql-connector-j-8.0.33.jar"
 
