@@ -21,10 +21,6 @@
   yum:
     name: chrony
     state: present
-- name: 删除chrony配置文件
-  file:
-    path: /etc/chrony.conf
-    state: absent
 
 - name: 设置主节点时钟同步服务
   template: 

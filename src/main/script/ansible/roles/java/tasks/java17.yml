@@ -29,7 +29,6 @@
     state: absent
   loop:
     - "{{ java17_home }}"
-    - /etc/profile.d/java.sh
 - name: Download java package
   get_url:
     url: "{{ java17_url }}"

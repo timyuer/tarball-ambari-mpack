@@ -21,10 +21,6 @@
 - debug:
     msg:
       - "ambari_version: {{ ambari_version }}"
-- name: remove Ambari repo file
-  file:
-    path: "/etc/yum.repos.d/ambari.repo"
-    state: absent
 - name: "Set Ambari-{{ ambari_version }} repo"
   yum_repository:
     name: ambari
