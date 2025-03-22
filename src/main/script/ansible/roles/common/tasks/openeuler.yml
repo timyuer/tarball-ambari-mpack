@@ -31,16 +31,25 @@
   get_url:
     url: "{{ curl_url }}"
     dest: /opt/curl-7.79.1-oe2203sp4.tar.gz
+
 - name: Extract curl tarball
   unarchive:
     src: /opt/curl-7.79.1-oe2203sp4.tar.gz
     dest: /opt/
     remote_src: yes
+
 - name: Backup existing curl binary
-  command: mv /usr/bin/curl /usr/bin/curl.bak
+  shell: mv /usr/bin/curl /usr/bin/curl.bak
   ignore_errors: yes
+
 - name: Create symlink for new curl binary
   file:
     src: /opt/curl-7.79.1/bin/curl
     dest: /usr/bin/curl
     state: link
+
+- name: 注释 /etc/yum.repos.d/openEuler.repo 文件中的所有 metalink 行
+  replace:
+    path: /etc/yum.repos.d/openEuler.repo
+    regexp: '^metalink='
+    replace: '#metalink='
