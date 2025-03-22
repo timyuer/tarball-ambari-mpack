@@ -29,78 +29,74 @@ from resource_management.libraries.resources.properties_file import PropertiesFi
 
 
 def setup_flink(env, type, upgrade_type=None, action=None):
-  import params
+    import params
 
-  Directory(params.flink_pid_dir,
-            owner=params.flink_user,
-            group=params.user_group,
-            mode=0775,
-            create_parents=True
-            )
+    Directory(params.flink_pid_dir,
+                owner=params.flink_user,
+                group=params.user_group,
+                mode=0775,
+                create_parents=True
+                )
 
-  Directory(params.flink_log_dir,
-            mode=0775,
-            cd_access='a',
-            owner=params.flink_user,
-            group=params.user_group,
-            create_parents=True
-            )
+    Directory(params.flink_log_dir,
+                mode=0775,
+                cd_access='a',
+                owner=params.flink_user,
+                group=params.user_group,
+                create_parents=True
+                )
 
-  Directory(params.flink_conf_dir,
-            owner=params.flink_user,
-            group=params.user_group,
-            mode=0775,
-            create_parents=True)
+    Directory(params.flink_conf_dir,
+                owner=params.flink_user,
+                group=params.user_group,
+                mode=0775,
+                create_parents=True)
 
-  if type == 'historyserver' and action == 'config':
-    params.HdfsResource(params.flink_hdfs_user_dir,
-                        type="directory",
-                        action="create_on_execute",
-                        owner=params.flink_user,
-                        mode=0775
-                        )
-    params.HdfsResource(params.flink_hdfs_dir,
-                        type="directory",
-                        action="create_on_execute",
-                        owner=params.flink_user,
-                        mode=0775
-                        )
+    if type == 'historyserver' and action == 'config':
+        params.HdfsResource(params.flink_hdfs_user_dir,
+                            type="directory",
+                            action="create_on_execute",
+                            owner=params.flink_user,
+                            mode=0775
+                            )
+        params.HdfsResource(params.flink_hdfs_dir,
+                            type="directory",
+                            action="create_on_execute",
+                            owner=params.flink_user,
+                            mode=0775
+                            )
 
-    params.HdfsResource(None, action="execute")
+        params.HdfsResource(None, action="execute")
 
-    Directory(params.historyserver_web_tmpdir,
-              mode=0755,
-              cd_access='a',
-              owner=params.flink_user,
-              group=params.user_group,
-              create_parents=True
-              )
+        Directory(params.historyserver_web_tmpdir,
+                mode=0755,
+                cd_access='a',
+                owner=params.flink_user,
+                group=params.user_group,
+                create_parents=True
+                )
 
-  flink_conf = dict(params.config['configurations']['flink-conf-yaml'])
-  PropertiesFile("flink-conf.yaml",
-        properties = flink_conf,
-        key_value_delimiter = ": ",
-        dir=params.flink_conf_dir,
+    File(format("{params.flink_conf_dir}/config.yaml"),
         owner=params.flink_user,
         group=params.user_group,
-        mode=0644
-    )
+        mode=0755,
+        content=InlineTemplate(params.flink_config_yaml_content))
 
-  File(format("{params.flink_conf_dir}/log4j.properties"),
-       owner=params.flink_user,
-       group=params.user_group,
-       mode=0755,
-       content=InlineTemplate(params.flink_log4j_properties_content))
+    File(format("{params.flink_conf_dir}/log4j.properties"),
+        owner=params.flink_user,
+        group=params.user_group,
+        mode=0755,
+        content=InlineTemplate(params.flink_log4j_properties_content))
 
-  # copy hadoop conf to flink
-  Link(params.flink_conf_dir + "/hdfs-site.xml",
-       to=params.hadoop_conf_dir + "/hdfs-site.xml")
-  Link(params.flink_conf_dir + "/yarn-site.xml",
-       to=params.hadoop_conf_dir + "/yarn-site.xml")
-  Link(params.flink_conf_dir + "/core-site.xml",
-       to=params.hadoop_conf_dir + "/core-site.xml")
+    # copy hadoop conf to flink
+    Link(params.flink_conf_dir + "/hdfs-site.xml",
+        to=params.hadoop_conf_dir + "/hdfs-site.xml")
+    Link(params.flink_conf_dir + "/yarn-site.xml",
+        to=params.hadoop_conf_dir + "/yarn-site.xml")
+    Link(params.flink_conf_dir + "/core-site.xml",
+        to=params.hadoop_conf_dir + "/core-site.xml")
 
-  Logger.info("Configuration complete")
+    Logger.info("Configuration complete")
 
 
 

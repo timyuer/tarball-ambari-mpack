@@ -99,10 +99,10 @@ def install_tarball(env):
 
     # wget
     Execute('wget -P {0} {1}'.format(params.flink_lib_dir, flink_shaded_hadoop_url))
-    Execute('wget -P {0} {1}'.format(params.flink_lib_dir, commons_cli_url))
-    Execute('wget -P {0} {1}'.format(params.flink_lib_dir, rs_url))
-    Execute('wget -P {0} {1}'.format(params.flink_lib_dir, jersey_core_url))
-    Execute('wget -P {0} {1}'.format(params.flink_lib_dir, jersey_common_url))
+    # Execute('wget -P {0} {1}'.format(params.flink_lib_dir, commons_cli_url))
+    # Execute('wget -P {0} {1}'.format(params.flink_lib_dir, rs_url))
+    # Execute('wget -P {0} {1}'.format(params.flink_lib_dir, jersey_core_url))
+    # Execute('wget -P {0} {1}'.format(params.flink_lib_dir, jersey_common_url))
     Execute('wget -P {0} {1}'.format(params.flink_lib_dir, flnk_jdbc_url))
     Execute('wget -P {0} {1}'.format(params.flink_lib_dir, flnk_kafka_url))
     # create link

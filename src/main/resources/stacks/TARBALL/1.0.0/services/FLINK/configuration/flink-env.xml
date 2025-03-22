@@ -68,9 +68,4 @@
     <value>/var/run/flink</value>
     <description>flink pid directory</description>
   </property>
-  <property>
-    <name>flink_dependency_jar</name>
-    <value>/hdp/apps/3.1.4.0-315/flink</value>
-    <description>hdfs path to flink dependency jar</description>
-  </property>
 </configuration>

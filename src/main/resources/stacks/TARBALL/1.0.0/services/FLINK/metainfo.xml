@@ -28,7 +28,7 @@
         communication, and
         fault tolerance for distributed computations over data streams.
       </comment>
-      <version>1.17.2</version>
+      <version>1.19.2</version>
       <components>
         <component>
           <name>FLINK_HISTORYSERVER</name>
@@ -113,7 +113,7 @@
 
       <configuration-dependencies>
         <config-type>flink-env</config-type>
-        <config-type>flink-conf-yaml</config-type>
+        <config-type>config-yaml</config-type>
         <config-type>flink-log4j-properties</config-type>
       </configuration-dependencies>
       <restartRequiredAfterChange>true</restartRequiredAfterChange>

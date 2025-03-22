@@ -23,7 +23,7 @@
   <property>
     <name>flink_url</name>
     <display-name>flink download url</display-name>
-    <value>/flink/flink-1.17.2-bin-scala_2.12.tgz</value>
+    <value>/flink/flink-1.19.2-bin-scala_2.12.tgz</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>
@@ -83,7 +83,7 @@
   <property>
     <name>flnk_jdbc_url</name>
     <display-name>flink-connector-jdbc download url</display-name>
-    <value>/flink/flink-connector-jdbc-3.1.2-1.17.jar</value>
+    <value>/flink/flink-connector-jdbc-3.2.0-1.19.jar</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>
@@ -93,7 +93,7 @@
   <property>
     <name>flnk_kafka_url</name>
     <display-name>flink-connector-kafka download url</display-name>
-    <value>/flink/flink-connector-kafka-1.17.2.jar</value>
+    <value>/flink/flink-connector-kafka-3.3.0-1.19.jar</value>
     <final>true</final>
     <value-attributes>
       <hidden>true</hidden>

@@ -45,6 +45,7 @@ stack_root = Script.get_stack_root()
 stack_version_unformatted = config['clusterLevelParams']['stack_version']
 
 java_home = config['ambariLevelParams']['java_home']
+java17_home = config['configurations']['config-yaml']['java17_home']
 
 stack_version_home = os.path.join(stack_root, stack_version_unformatted)
 
@@ -87,30 +88,11 @@ flink_historyserver_hosts = default("/clusterHostInfo/flink_historyserver_hosts"
 flink_historyserver_host = flink_historyserver_hosts[0]
 
 # params from flink-ambari-config
-'''
-KEY_ENV_PID_DIR="env.pid.dir"
-KEY_ENV_LOG_DIR="env.log.dir"
-KEY_ENV_LOG_MAX="env.log.max"
-KEY_ENV_YARN_CONF_DIR="env.yarn.conf.dir"
-KEY_ENV_HADOOP_CONF_DIR="env.hadoop.conf.dir"
-KEY_ENV_HBASE_CONF_DIR="env.hbase.conf.dir"
-KEY_ENV_JAVA_HOME="env.java.home"
-KEY_ENV_JAVA_OPTS="env.java.opts"
-KEY_ENV_JAVA_OPTS_JM="env.java.opts.jobmanager"
-KEY_ENV_JAVA_OPTS_TM="env.java.opts.taskmanager"
-KEY_ENV_JAVA_OPTS_HS="env.java.opts.historyserver"
-KEY_ENV_JAVA_OPTS_CLI="env.java.opts.client"
-KEY_ENV_SSH_OPTS="env.ssh.opts"
-KEY_HIGH_AVAILABILITY="high-availability"
-KEY_ZK_HEAP_MB="zookeeper.heap.mb"
-'''
-env_java_opts = '-XX:+UseG1GC'
 env_log_max = config['configurations']['flink-env']['env_log_max']
 
 historyserver_web_tmpdir = '/tmp/flinkhistoryserver/'
-flink_conf_yaml_content = config['configurations']['flink-conf-yaml']['flink-conf-content']
+flink_config_yaml_content = config['configurations']['config-yaml']['config-yaml-content']
 flink_log4j_properties_content = config['configurations']['flink-log4j-properties']['log4j-properties-content']
-flink_dependency_jar = config['configurations']['flink-env']['flink_dependency_jar']
 HISTORY_WEB_ADDRESS = socket.gethostname()
 
 
