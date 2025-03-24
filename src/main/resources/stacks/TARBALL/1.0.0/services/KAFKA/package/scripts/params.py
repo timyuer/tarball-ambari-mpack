@@ -45,7 +45,8 @@ stack_root = Script.get_stack_root()
 stack_version_unformatted = config["clusterLevelParams"]["stack_version"]
 stack_version_formatted = format_stack_version(stack_version_unformatted)
 
-java_home = config["ambariLevelParams"]["java_home"]
+# java_home = config["ambariLevelParams"]["java_home"]
+java_home = '/usr/local/java17'
 hostname = config["agentLevelParams"]["hostname"]
 host_info = config["clusterHostInfo"]
 host_level_params = config["ambariLevelParams"]
@@ -93,7 +94,6 @@ kafka_err_file = kafka_log_dir + "/kafka.err"
 kafka_managed_pid_dir = "/var/run/kafka"
 kafka_managed_log_dir = "/var/log/kafka"
 user_group = config['configurations']['cluster-env']['user_group']
-java64_home = config['ambariLevelParams']['java_home']
 kafka_env_sh_template = config['configurations']['kafka-env']['content']
 kafka_jaas_conf_template = default("/configurations/kafka_jaas_conf/content", None)
 kafka_client_jaas_conf_template = default("/configurations/kafka_client_jaas_conf/content", None)
