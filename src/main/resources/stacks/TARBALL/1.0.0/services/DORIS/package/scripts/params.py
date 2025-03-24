@@ -47,8 +47,9 @@ stack_root = Script.get_stack_root()
 # This is expected to be of the form #.#.#.#
 stack_version_unformatted = config["clusterLevelParams"]["stack_version"]
 
-# java_home = config["ambariLevelParams"]["java_home"]
-java_home = '/usr/local/java17'
+java_home = config["ambariLevelParams"]["java_home"]
+java17_home = config['configurations']['cluster-env']['java17_home']
+java_home = java17_home if java17_home is not None and os.path.exists(java17_home) else java_home
 hostname = config["agentLevelParams"]["hostname"]
 host_info = config["clusterHostInfo"]
 host_level_params = config["ambariLevelParams"]

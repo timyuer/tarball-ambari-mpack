@@ -40,6 +40,12 @@
 -->
 <configuration>
   <property>
+    <name>java17_home</name>
+    <value>/usr/local/java17</value>
+    <description>java 17 home dir.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>recovery_enabled</name>
     <value>true</value>
     <description>Auto start enabled or not for this cluster.</description>
