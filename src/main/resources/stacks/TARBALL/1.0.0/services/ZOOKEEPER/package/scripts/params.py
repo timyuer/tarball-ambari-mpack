@@ -41,7 +41,8 @@ stack_root = Script.get_stack_root()
 # This is expected to be of the form #.#.#.#
 stack_version_unformatted = config["clusterLevelParams"]["stack_version"]
 
-java_home = config["ambariLevelParams"]["java_home"]
+# java_home = config["ambariLevelParams"]["java_home"]
+java_home = '/usr/local/java17'
 hostname = config["agentLevelParams"]["hostname"]
 host_info = config["clusterHostInfo"]
 host_level_params = config["ambariLevelParams"]
@@ -85,9 +86,6 @@ zoo_cfg_properties_map_length = len(zoo_cfg_properties_map)
 zk_principal_name = default("/configurations/zookeeper-env/zookeeper_principal_name", "zookeeper/_HOST@EXAMPLE.COM")
 zk_principal_user = zk_principal_name.split('/')[0]
 zk_principal = zk_principal_name.replace('_HOST',hostname.lower())
-
-java64_home = config['ambariLevelParams']['java_home']
-java_version = expect("/ambariLevelParams/java_version", int)
 
 zookeeper_hosts = config['clusterHostInfo']['zookeeper_server_hosts']
 zookeeper_hosts.sort()
