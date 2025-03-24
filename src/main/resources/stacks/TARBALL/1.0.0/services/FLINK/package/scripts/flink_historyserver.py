@@ -35,7 +35,6 @@ class FlinkHistoryServer(Script):
     env.set_params(params)
     from install_tarball import install_tarball
     install_tarball(env)
-    self.configure(env)
 
   def configure(self, env, upgrade_type=None):
     import params
