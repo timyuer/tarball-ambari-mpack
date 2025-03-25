@@ -28,7 +28,7 @@
 | kafka | 3.7.2 |
 | flink | 1.17.1 |
 | doris | 2.1.7 |
-| seatunnel | 2.3.8 |
+| seatunnel | 2.3.9 |
 | dolphinscheduler | 3.2.2 |
 | elasticsearch | 7.17.3 |
 
@@ -84,16 +84,18 @@ https://apache-doris-releases.oss-accelerate.aliyuncs.com/apache-doris-2.1.7-bin
 
 ## seatunnel
 ```bash
-https://archive.apache.org/dist/seatunnel/2.3.8/apache-seatunnel-2.3.8-bin.tar.gz
 
-https://repo.maven.apache.org/maven2/org/apache/seatunnel/seatunnel-hadoop3-3.1.4-uber/2.3.8/seatunnel-hadoop3-3.1.4-uber-2.3.8-optional.jar
-https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-hive/2.3.8/connector-hive-2.3.8.jar
-https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-jdbc/2.3.8/connector-jdbc-2.3.8.jar
-https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-doris/2.3.8/connector-doris-2.3.8.jar
-https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-cdc-mysql/2.3.8/connector-cdc-mysql-2.3.8.jar
-https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-cdc-sqlserver/2.3.8/connector-cdc-sqlserver-2.3.8.jar
-https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-kafka/2.3.8/connector-kafka-2.3.8.jar
-https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-elasticsearch/2.3.8/connector-elasticsearch-2.3.8.jar
+https://archive.apache.org/dist/seatunnel/2.3.9/apache-seatunnel-2.3.9-bin.tar.gz
+
+https://repo.maven.apache.org/maven2/org/apache/seatunnel/seatunnel-hadoop3-3.1.4-uber/2.3.9/seatunnel-hadoop3-3.1.4-uber-2.3.9-optional.jar
+https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-hive/2.3.9/connector-hive-2.3.9.jar
+https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-jdbc/2.3.9/connector-jdbc-2.3.9.jar
+https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-doris/2.3.9/connector-doris-2.3.9.jar
+https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-cdc-mysql/2.3.9/connector-cdc-mysql-2.3.9.jar
+https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-cdc-sqlserver/2.3.9/connector-cdc-sqlserver-2.3.9.jar
+https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-kafka/2.3.9/connector-kafka-2.3.9.jar
+https://repo.maven.apache.org/maven2/org/apache/seatunnel/connector-elasticsearch/2.3.9/connector-elasticsearch-2.3.9.jar
+
 ```
 
 ## dolphinscheduler
