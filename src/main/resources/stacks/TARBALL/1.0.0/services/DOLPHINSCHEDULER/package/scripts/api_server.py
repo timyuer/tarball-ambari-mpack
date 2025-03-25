@@ -33,6 +33,8 @@ from dolphinscheduler_service import dolphinscheduler_service
 class ApiServer(Script):
   def install(self, env):
     import params
+    env.set_params(params)
+    self.install_packages(env)
     from install_tarball import install_tarball
     install_tarball(env)
 
