@@ -143,7 +143,7 @@ class KafkaBroker(Script):
     Execute(
       "{0} --zookeeper.connect {1} --zookeeper.acl=unsecure".format(params.kafka_security_migrator, params.zookeeper_connect), \
       user=params.kafka_user, \
-      environment={ 'JAVA_HOME': params.java64_home }, \
+      environment={ 'JAVA_HOME': params.java_home }, \
       logoutput=True, \
       tries=3)
 

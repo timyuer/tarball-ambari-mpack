@@ -134,7 +134,7 @@ USER="$(whoami)"
 export HADOOP_LOG_DIR={{yarn_log_dir_prefix}}/$USER
 export HADOOP_PID_DIR={{yarn_pid_dir_prefix}}/$USER
 export HADOOP_LIBEXEC_DIR={{hadoop_libexec_dir}}
-export JAVA_HOME={{java64_home}}
+export JAVA_HOME={{java_home}}
 export JAVA_LIBRARY_PATH="${JAVA_LIBRARY_PATH}:{{hadoop_java_io_tmpdir}}"
 
 # User for YARN daemons

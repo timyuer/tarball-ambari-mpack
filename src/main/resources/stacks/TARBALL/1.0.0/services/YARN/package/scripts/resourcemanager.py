@@ -152,7 +152,7 @@ class ResourcemanagerDefault(Resourcemanager):
     zkmigrator = ZkMigrator(
       params.rm_zk_address, \
       params.java_exec, \
-      params.java64_home, \
+      params.java_home, \
       params.yarn_jaas_file, \
       params.yarn_user)
     zkmigrator.set_acls(params.rm_zk_znode, 'world:anyone:crdwa')

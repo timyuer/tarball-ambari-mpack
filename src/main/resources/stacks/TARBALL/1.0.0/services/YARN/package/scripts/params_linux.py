@@ -223,8 +223,6 @@ rm_https_port = default('/configurations/yarn-site/yarn.resourcemanager.webapp.h
 rm_nodes_exclude_path = default("/configurations/yarn-site/yarn.resourcemanager.nodes.exclude-path","/etc/hadoop/conf/yarn.exclude")
 rm_nodes_exclude_dir = os.path.dirname(rm_nodes_exclude_path)
 
-java64_home = config['ambariLevelParams']['java_home']
-java_exec = format("{java64_home}/bin/java")
 hadoop_ssl_enabled = default("/configurations/core-site/hadoop.ssl.enabled", False)
 
 yarn_heapsize = config['configurations']['yarn-env']['yarn_heapsize']
