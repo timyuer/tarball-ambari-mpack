@@ -22,7 +22,7 @@
       <name>SEATUNNEL</name>
       <displayName>SeaTunnel</displayName>
       <comment>Next-generation high-performance, distributed, massive data integration framework.</comment>
-      <version>2.3.8</version>
+      <version>2.3.9</version>
       <components>
         <component>
           <name>SEATUNNEL_SERVER</name>
