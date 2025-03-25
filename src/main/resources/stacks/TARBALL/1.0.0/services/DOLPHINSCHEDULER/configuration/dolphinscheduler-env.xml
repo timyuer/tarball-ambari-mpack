@@ -156,7 +156,7 @@
 #
 
 # JAVA_HOME, will use it to start DolphinScheduler server
-export JAVA_HOME=${JAVA_HOME:-{{java_home}}}
+export JAVA_HOME={{java_home}}
 
 # Database related configuration, set database type, username and password
 # for mysql
