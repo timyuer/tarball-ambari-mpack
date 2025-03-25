@@ -47,7 +47,9 @@ stack_version_formatted = format_stack_version(stack_version_unformatted)
 hostname = config['agentLevelParams']['hostname']
 ambari_server_host = config['ambariLevelParams']['ambari_server_host']
 
-java_home = config['ambariLevelParams']['java_home']
+java_home = config["ambariLevelParams"]["java_home"]
+java17_home = config['configurations']['cluster-env']['java17_home']
+java_home = java17_home if java17_home is not None and os.path.exists(java17_home) else java_home
 
 stack_version_home = os.path.join(stack_root, stack_version_unformatted)
 
