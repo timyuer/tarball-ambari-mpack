@@ -22,7 +22,7 @@
       <name>DORIS</name>
       <displayName>Doris</displayName>
       <comment>An easy-to-use, high-performance and unified analytical database.</comment>
-      <version>2.1.7</version>
+      <version>3.0.4</version>
       <components>
         <component>
           <name>FE</name>
