@@ -162,7 +162,7 @@ export JAVA_HOME=${JAVA_HOME:-{{java_home}}}
 # for mysql
 export DATABASE={{dolphinscheduler_database_type}}
 export SPRING_PROFILES_ACTIVE=${DATABASE}
-export SPRING_DATASOURCE_URL="jdbc:mysql://{{dolphinscheduler_database_host}}:{{dolphinscheduler_database_port}}/{{dolphinscheduler_database_name}}?useUnicode=true&characterEncoding=UTF-8&useSSL=false"
+export SPRING_DATASOURCE_URL="jdbc:mysql://{{dolphinscheduler_database_host}}:{{dolphinscheduler_database_port}}/{{dolphinscheduler_database_name}}?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true"
 export SPRING_DATASOURCE_USERNAME={{dolphinscheduler_database_user}}
 export SPRING_DATASOURCE_PASSWORD={{dolphinscheduler_database_password}}
 
