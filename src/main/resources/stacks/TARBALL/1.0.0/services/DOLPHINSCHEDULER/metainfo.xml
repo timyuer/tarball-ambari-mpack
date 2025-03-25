@@ -81,6 +81,11 @@
       <osSpecifics>
         <osSpecific>
           <osFamily>any</osFamily>
+          <packages>
+            <package>
+              <name>psmisc</name>
+            </package>
+          </packages>
         </osSpecific>
       </osSpecifics>
       <quickLinksConfigurations>
