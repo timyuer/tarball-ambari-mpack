@@ -73,7 +73,7 @@ stack_version_formatted = format_stack_version(stack_version_unformatted)
 # Get Java Home
 java_home = config["ambariLevelParams"]["java_home"]
 java17_home = config['configurations']['cluster-env']['java17_home']
-java_home = java17_home if java17_home is not None and os.path.exists(java17_home) else java_home
+# java_home = java17_home if java17_home is not None and os.path.exists(java17_home) else java_home
 java_version = expect("/ambariLevelParams/java_version", int)
 java_exec = format("{java_home}/bin/java")
 
